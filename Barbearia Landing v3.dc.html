@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bodoni+Moda:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:#0A0A0B; --carbon:#131315; --graphite:#1A1A1D; --ash:#26262A;
+      --line:#2A2A2F; --line-2:#3B3B42;
+      --bone:#ECE7DE; --bone-dim:#C6C1B6; --smoke:#8E8A82; --smoke-dim:#66625B;
+      --brass:#C1974B; --brass-hi:#DDB878; --brass-deep:#7C5F2A;
+      --error:#D77B66;
+      --serif:'Bodoni Moda', Georgia, 'Times New Roman', serif;
+      --ui:'Archivo', system-ui, -apple-system, sans-serif;
+      --r:2px;
+    }
+    *, *::before, *::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:82px; }
+    body { margin:0; background:var(--ink); overflow-x:hidden; }
+    a { color:var(--brass); text-decoration:none; }
+    a:hover { color:var(--brass-hi); }
+    ::selection { background:var(--brass); color:var(--ink); }
+    input::placeholder { color:#726D63; }
+    input:focus { outline:none; border-color:var(--brass-hi) !important; box-shadow:0 0 0 3px rgba(221,184,120,.16); }
+    :where(a, button, input):focus-visible { outline:2px solid var(--brass-hi); outline-offset:3px; }
+
+    .accent-cobre { --brass:#B06A3C; --brass-hi:#DA9367; --brass-deep:#6C3D20; }
+    .accent-aco   { --brass:#7F8A96; --brass-hi:#B0B9C3; --brass-deep:#49515B; }
+
+    .shell { max-width:1180px; margin:0 auto; padding-left:40px; padding-right:40px; }
+
+    .nav-menu { display:flex; align-items:center; gap:30px; }
+    .nav-toggle { display:none; }
+    .nav-link { position:relative; transition:color .18s; }
+    .nav-link:hover { color:var(--bone) !important; }
+    .nav-link[aria-current="page"] { color:var(--bone) !important; }
+    .nav-link[aria-current="page"]::after { content:''; position:absolute; left:0; bottom:-7px; width:16px; height:2px; background:var(--brass); }
+
+    .btn-primary:hover { background:var(--brass-hi) !important; border-color:var(--brass-hi) !important; }
+    .btn-ghost:hover { border-color:var(--brass) !important; color:var(--bone) !important; }
+
+    .kicker { font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:2.6px; text-transform:uppercase; color:var(--smoke); }
+    .kicker b { color:var(--brass); font-weight:600; margin-right:9px; }
+
+    .tabela-row { transition:background .2s; }
+    .tabela-row:hover { background:rgba(193,151,75,.05); }
+    .tabela-row:hover .tabela-name { color:var(--brass-hi); }
+    .tabela-name { transition:color .2s; }
+
+    .chip:hover { border-color:var(--brass) !important; }
+    .daychip:hover { border-color:var(--brass) !important; }
+    .time-slot:hover:not(:disabled) { border-color:var(--brass) !important; }
+    .time-slot:disabled { opacity:.32 !important; text-decoration:line-through; cursor:not-allowed !important; }
+    .confirm-button:disabled { cursor:not-allowed !important; }
+
+    .featured-img { filter:saturate(.85) contrast(1.05); transition:transform .6s ease; }
+    .featured:hover .featured-img { transform:scale(1.03); }
+
+    .gimg-hover { filter:grayscale(1) contrast(1.04); transition:filter .45s ease; }
+    .gimg-hover:hover { filter:grayscale(0) saturate(1) contrast(1.02); }
+    .gimg-color { filter:saturate(.94) contrast(1.03); }
+    .gimg-bw { filter:grayscale(1) contrast(1.04); }
+
+    .success-link:hover { border-color:var(--brass) !important; color:var(--bone) !important; }
+
+    .nav-shell {
+      height:72px;
+      background:linear-gradient(180deg,rgba(8,8,9,.94),rgba(8,8,9,.78)) !important;
+      border-bottom-color:rgba(236,231,222,.12) !important;
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+    }
+    .nav-shell::after {
+      content:'';
+      position:absolute;
+      right:40px;
+      bottom:-1px;
+      width:56px;
+      height:1px;
+      background:var(--brass);
+    }
+    .site-wordmark { transition:opacity .2s ease; }
+    .site-wordmark:hover { color:var(--bone); opacity:.78; }
+    .nav-cta { min-width:112px; text-align:center; }
+
+    .hero-premium {
+      position:relative;
+      isolation:isolate;
+      min-height:max(760px,100svh);
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 18% 42%, rgba(193,151,75,.075), transparent 28%),
+        linear-gradient(122deg,#080809 0%,#0d0d0f 55%,#080809 100%);
+    }
+    .hero-premium::before {
+      content:'';
+      position:absolute;
+      z-index:0;
+      inset:72px 0 0;
+      pointer-events:none;
+      background:
+        linear-gradient(90deg,transparent calc(50% - 590px),rgba(236,231,222,.055) calc(50% - 589px),transparent calc(50% - 588px)),
+        linear-gradient(90deg,transparent calc(50% + 589px),rgba(236,231,222,.055) calc(50% + 590px),transparent calc(50% + 591px));
+    }
+    .hero-grid {
+      position:absolute;
+      z-index:1;
+      inset:72px 0 0;
+      pointer-events:none;
+      opacity:.48;
+      background-image:linear-gradient(90deg,rgba(236,231,222,.055) 1px,transparent 1px);
+      background-size:25% 100%;
+      -webkit-mask-image:linear-gradient(90deg,transparent 2%,#000 28%,#000 82%,transparent);
+      mask-image:linear-gradient(90deg,transparent 2%,#000 28%,#000 82%,transparent);
+    }
+    .hero-media {
+      position:absolute;
+      z-index:0;
+      top:72px;
+      right:0;
+      bottom:0;
+      left:40%;
+      overflow:hidden;
+      clip-path:polygon(12% 0,100% 0,100% 100%,0 100%,0 19%);
+      background:#111;
+      animation:heroMediaReveal 1.35s cubic-bezier(.16,1,.3,1) both;
+    }
+    .hero-media::before {
+      content:'';
+      position:absolute;
+      z-index:2;
+      inset:0;
+      background:
+        linear-gradient(90deg,rgba(9,9,10,.82) 0%,rgba(9,9,10,.22) 28%,rgba(9,9,10,.04) 62%,rgba(9,9,10,.35) 100%),
+        linear-gradient(180deg,rgba(9,9,10,.08) 45%,rgba(9,9,10,.76) 100%);
+      pointer-events:none;
+    }
+    .hero-media::after {
+      content:'';
+      position:absolute;
+      z-index:3;
+      inset:0;
+      border-left:1px solid rgba(221,184,120,.32);
+      border-top:1px solid rgba(236,231,222,.09);
+      pointer-events:none;
+    }
+    .hero-video {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:53% center;
+      filter:brightness(.64) saturate(.58) contrast(1.12);
+      transform:scale(1.045);
+      animation:heroVideoDrift 14s ease-out both;
+    }
+    .hero-media-code {
+      position:absolute;
+      z-index:4;
+      top:25px;
+      right:30px;
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-family:var(--ui);
+      font-size:9px;
+      font-weight:600;
+      letter-spacing:2.6px;
+      text-transform:uppercase;
+      color:rgba(236,231,222,.66);
+    }
+    .hero-media-code::before {
+      content:'';
+      width:32px;
+      height:1px;
+      background:var(--brass);
+    }
+    .hero-video-toggle {
+      position:absolute;
+      z-index:5;
+      top:19px;
+      left:15%;
+      display:grid;
+      width:34px;
+      height:34px;
+      place-items:center;
+      padding:0;
+      border:1px solid rgba(236,231,222,.34);
+      border-radius:50%;
+      background:rgba(9,9,10,.38);
+      color:var(--bone);
+      font-family:var(--ui);
+      font-size:10px;
+      line-height:1;
+      cursor:pointer;
+      backdrop-filter:blur(8px);
+      transition:border-color .2s,background .2s,transform .2s;
+    }
+    .hero-video-toggle:hover {
+      border-color:var(--brass-hi);
+      background:rgba(9,9,10,.72);
+      color:var(--brass-hi);
+      transform:scale(1.06);
+    }
+    .hero-media-caption {
+      position:absolute;
+      z-index:4;
+      right:30px;
+      bottom:38px;
+      width:min(260px,36%);
+      padding:16px 0 0;
+      border-top:1px solid rgba(236,231,222,.28);
+      text-align:right;
+    }
+    .hero-media-caption small,
+    .hero-media-caption strong { display:block; }
+    .hero-media-caption small {
+      margin-bottom:8px;
+      font-family:var(--ui);
+      font-size:9px;
+      font-weight:600;
+      letter-spacing:2.4px;
+      text-transform:uppercase;
+      color:var(--brass-hi);
+    }
+    .hero-media-caption strong {
+      font-family:var(--serif);
+      font-size:19px;
+      font-weight:500;
+      line-height:1.25;
+      color:var(--bone);
+    }
+    .hero-ghost {
+      position:absolute;
+      z-index:0;
+      left:-.035em;
+      bottom:-.27em;
+      font-family:var(--serif);
+      font-size:clamp(300px,37vw,580px);
+      font-weight:700;
+      line-height:1;
+      color:transparent;
+      -webkit-text-stroke:1px rgba(236,231,222,.045);
+      user-select:none;
+      pointer-events:none;
+    }
+    .hero-shell {
+      position:relative;
+      z-index:5;
+      display:flex;
+      flex-direction:column;
+      max-width:none;
+      margin-left:0;
+      margin-right:0;
+      padding-left:clamp(28px,4vw,64px);
+      padding-right:clamp(28px,4vw,64px);
+      min-height:max(760px,100svh);
+      padding-top:72px;
+      padding-bottom:28px;
+    }
+    .hero-stage {
+      position:relative;
+      display:flex;
+      flex:1;
+      align-items:center;
+      min-height:0;
+      padding:64px 0 42px;
+    }
+    .hero-copy { width:min(100%,960px); }
+    .hero-kicker {
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin:0 0 24px 2px;
+      font-family:var(--ui);
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:3.2px;
+      text-transform:uppercase;
+      color:var(--bone-dim);
+      animation:heroFadeUp .8s .18s cubic-bezier(.2,.75,.25,1) both;
+    }
+    .hero-kicker::before {
+      content:'';
+      width:34px;
+      height:1px;
+      background:var(--brass);
+      box-shadow:9px 0 0 -4px var(--brass);
+    }
+    .hero-kicker em {
+      color:var(--brass-hi);
+      font-style:normal;
+    }
+    .hero-title {
+      max-width:980px;
+      margin:0;
+      font-family:var(--serif);
+      font-size:clamp(72px,8.65vw,128px);
+      font-weight:700;
+      line-height:.82;
+      letter-spacing:-.045em;
+      color:var(--bone);
+      text-wrap:balance;
+    }
+    .hero-title-line {
+      display:block;
+      overflow:hidden;
+      padding:.08em .04em .11em 0;
+    }
+    .hero-title-line > span {
+      display:block;
+      transform-origin:left bottom;
+      animation:heroTitleIn 1s cubic-bezier(.16,1,.3,1) both;
+    }
+    .hero-title-line:nth-child(2) > span { animation-delay:.12s; }
+    .hero-title-line--offset { padding-left:0; }
+    .hero-title em {
+      position:relative;
+      font-weight:500;
+      font-style:italic;
+      color:var(--brass-hi);
+    }
+    .hero-intro {
+      display:block;
+      max-width:480px;
+      margin-top:26px;
+      animation:heroFadeUp .9s .42s cubic-bezier(.2,.75,.25,1) both;
+    }
+    .hero-intro-rule {
+      display:none;
+    }
+    .hero-sub {
+      max-width:46ch;
+      margin:0;
+      font-family:var(--ui);
+      font-size:15px;
+      line-height:1.72;
+      color:var(--bone-dim);
+      text-wrap:pretty;
+    }
+    .hero-ctas {
+      display:flex;
+      align-items:center;
+      gap:28px;
+      margin-top:28px;
+    }
+    .hero-primary {
+      display:inline-grid;
+      grid-template-columns:1fr 48px;
+      align-items:center;
+      min-width:236px;
+      min-height:56px;
+      border:1px solid var(--brass);
+      background:var(--brass);
+      color:var(--ink);
+      font-family:var(--ui);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+      transition:background .2s,border-color .2s,transform .2s;
+    }
+    .hero-primary > span:first-child { padding:0 22px; text-align:center; }
+    .hero-primary .hero-primary-arrow {
+      display:grid;
+      place-items:center;
+      align-self:stretch;
+      border-left:1px solid rgba(10,10,11,.24);
+      font-size:17px;
+      transition:transform .2s;
+    }
+    .hero-primary:hover {
+      background:var(--brass-hi);
+      border-color:var(--brass-hi);
+      color:var(--ink);
+      transform:translateY(-2px);
+    }
+    .hero-primary:hover .hero-primary-arrow { transform:translate(2px,-2px); }
+    .hero-secondary {
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      padding:17px 0 12px;
+      color:var(--bone);
+      font-family:var(--ui);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:1.7px;
+      text-transform:uppercase;
+    }
+    .hero-secondary::after {
+      content:'';
+      position:absolute;
+      right:0;
+      bottom:7px;
+      left:0;
+      height:1px;
+      background:rgba(236,231,222,.3);
+      transform-origin:right;
+      transition:background .2s,transform .3s;
+    }
+    .hero-secondary:hover { color:var(--brass-hi); }
+    .hero-secondary:hover::after { background:var(--brass); transform:scaleX(.45); }
+    .hero-seal {
+      position:absolute;
+      top:13%;
+      right:3.5%;
+      width:132px;
+      aspect-ratio:1;
+      display:grid;
+      place-items:center;
+      color:var(--bone);
+      animation:heroFadeUp .9s .6s cubic-bezier(.2,.75,.25,1) both;
+    }
+    .hero-seal-orbit {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      overflow:visible;
+      animation:heroSealSpin 24s linear infinite;
+    }
+    .hero-seal-orbit text {
+      fill:rgba(236,231,222,.82);
+      font-family:var(--ui);
+      font-size:8.2px;
+      font-weight:600;
+      letter-spacing:2.2px;
+    }
+    .hero-seal-core {
+      position:relative;
+      width:48px;
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
+      border:1px solid rgba(236,231,222,.24);
+      border-radius:50%;
+      background:rgba(9,9,10,.4);
+      backdrop-filter:blur(5px);
+    }
+    .hero-seal-core i {
+      width:3px;
+      height:23px;
+      background:var(--bone);
+    }
+    .hero-seal-core i:nth-child(2) { height:31px; background:var(--brass-hi); }
+    .hero-bottom {
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:30px;
+      padding-top:19px;
+      border-top:1px solid rgba(236,231,222,.16);
+      animation:heroFadeUp .8s .72s cubic-bezier(.2,.75,.25,1) both;
+    }
+    .hero-facts {
+      display:flex;
+      align-items:center;
+      gap:0;
+    }
+    .hero-fact {
+      display:grid;
+      grid-template-columns:auto auto;
+      gap:9px;
+      align-items:baseline;
+      padding:0 26px;
+      border-right:1px solid rgba(236,231,222,.14);
+    }
+    .hero-fact:first-child { padding-left:0; }
+    .hero-fact:last-child { border-right:0; }
+    .hero-fact small {
+      font-family:var(--serif);
+      font-size:13px;
+      font-style:italic;
+      color:var(--brass-hi);
+    }
+    .hero-fact span {
+      font-family:var(--ui);
+      font-size:9.5px;
+      font-weight:600;
+      letter-spacing:1.6px;
+      text-transform:uppercase;
+      color:var(--smoke);
+      white-space:nowrap;
+    }
+    .hero-scroll {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:var(--smoke);
+      font-family:var(--ui);
+      font-size:9px;
+      font-weight:600;
+      letter-spacing:2.2px;
+      text-transform:uppercase;
+    }
+    .hero-scroll:hover { color:var(--bone); }
+    .hero-scroll-line {
+      position:relative;
+      width:52px;
+      height:1px;
+      overflow:hidden;
+      background:rgba(236,231,222,.16);
+    }
+    .hero-scroll-line::after {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:var(--brass);
+      transform:translateX(-100%);
+      animation:heroScroll 2.2s 1s ease-in-out infinite;
+    }
+
+    @keyframes heroMediaReveal {
+      from { opacity:0; clip-path:polygon(100% 0,100% 0,100% 100%,88% 100%,88% 19%); }
+      to { opacity:1; clip-path:polygon(12% 0,100% 0,100% 100%,0 100%,0 19%); }
+    }
+    @keyframes heroVideoDrift {
+      from { transform:scale(1.095); }
+      to { transform:scale(1.045); }
+    }
+    @keyframes heroTitleIn {
+      from { opacity:0; transform:translateY(112%) skewY(2.2deg); }
+      to { opacity:1; transform:translateY(0) skewY(0); }
+    }
+    @keyframes heroFadeUp {
+      from { opacity:0; transform:translateY(18px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+    @keyframes heroSealSpin { to { transform:rotate(360deg); } }
+    @keyframes heroScroll {
+      0% { transform:translateX(-100%); }
+      45%,55% { transform:translateX(0); }
+      100% { transform:translateX(100%); }
+    }
+
+    @media (max-width:900px) {
+      .nav-shell { padding:15px 20px !important; }
+      .nav-shell::after { right:20px; }
+      .nav-toggle { display:inline-flex; width:42px; height:42px; align-items:center; justify-content:center; background:transparent; border:1px solid var(--line-2); color:var(--bone); cursor:pointer; font-size:19px; border-radius:var(--r); }
+      .nav-menu { position:absolute; top:calc(100% + 1px); left:12px; right:12px; flex-direction:column; align-items:stretch; gap:2px; padding:8px; background:var(--carbon); border:1px solid var(--line-2); box-shadow:0 16px 32px rgba(0,0,0,.45); display:none; }
+      .nav-shell.nav-open .nav-menu { display:flex; }
+      .nav-link, .nav-cta { display:block !important; padding:15px 16px !important; text-align:left; }
+      .nav-link[aria-current="page"]::after { display:none; }
+      .nav-cta { text-align:center !important; margin-top:6px; }
+      .hero-media { left:31%; }
+      .hero-seal { display:none; }
+      .hero-title { font-size:clamp(68px,11.5vw,102px); }
+      .hero-fact { padding:0 18px; }
+      .hero-fact:nth-child(3) { display:none; }
+    }
+    @media (max-width:860px) {
+      .featured-grid { grid-template-columns:1fr !important; }
+      .featured-media { min-height:260px !important; }
+      .diff-grid { grid-template-columns:1fr !important; }
+      .booking-layout { grid-template-columns:1fr !important; gap:36px !important; }
+      .summary { position:static !important; }
+      .contact-grid { grid-template-columns:1fr !important; gap:40px !important; }
+    }
+    @media (max-width:720px) {
+      .shell { padding-left:20px !important; padding-right:20px !important; }
+      .sec { padding-top:64px !important; padding-bottom:64px !important; }
+      .hero-premium { min-height:max(780px,100svh); }
+      .hero-premium::before,
+      .hero-grid,
+      .hero-ghost { display:none; }
+      .hero-media {
+        top:72px;
+        right:0;
+        bottom:auto;
+        left:20px;
+        height:clamp(330px,49vh,430px);
+        clip-path:polygon(0 0,100% 0,100% 100%,0 90%);
+        animation-name:heroMediaRevealMobile;
+      }
+      .hero-media::before {
+        background:
+          linear-gradient(90deg,rgba(9,9,10,.42),rgba(9,9,10,.03) 55%),
+          linear-gradient(180deg,rgba(9,9,10,.08) 30%,rgba(9,9,10,.95) 100%);
+      }
+      .hero-media::after { border-left-color:rgba(221,184,120,.24); }
+      .hero-video { object-position:50% center; }
+      .hero-media-code { top:17px; right:18px; }
+      .hero-video-toggle { top:14px; left:16px; }
+      .hero-media-caption { display:none; }
+      .hero-shell {
+        min-height:max(780px,100svh);
+        padding-top:clamp(300px,43vh,374px);
+        padding-bottom:22px;
+      }
+      .hero-stage {
+        display:block;
+        flex:none;
+        padding:0 0 38px;
+      }
+      .hero-kicker {
+        gap:10px;
+        margin-bottom:17px;
+        font-size:8px;
+        line-height:1.45;
+        letter-spacing:1.8px;
+      }
+      .hero-kicker::before { width:24px; }
+      .hero-kicker em { white-space:nowrap; }
+      .hero-title {
+        font-size:clamp(54px,16.5vw,78px);
+        line-height:.86;
+        letter-spacing:-.04em;
+      }
+      .hero-title-line--offset { padding-left:0; }
+      .hero-intro {
+        display:block;
+        margin-top:17px;
+      }
+      .hero-sub { font-size:13.5px; line-height:1.62; }
+      .hero-ctas {
+        align-items:stretch;
+        gap:18px;
+        margin-top:20px;
+      }
+      .hero-primary {
+        grid-template-columns:1fr 44px;
+        min-width:0;
+        min-height:52px;
+        flex:1;
+      }
+      .hero-primary > span:first-child { padding:0 14px; }
+      .hero-secondary { flex:0 0 auto; }
+      .hero-bottom { padding-top:14px; }
+      .hero-facts { flex:1; }
+      .hero-fact {
+        display:block;
+        flex:1;
+        padding:0 12px;
+      }
+      .hero-fact:first-child { padding-left:0; }
+      .hero-fact small { display:block; margin-bottom:4px; font-size:11px; }
+      .hero-fact span { display:block; font-size:8px; letter-spacing:1.1px; white-space:normal; }
+      .hero-scroll { display:none; }
+      .gallery-grid { grid-template-columns:repeat(2,1fr) !important; grid-auto-rows:150px !important; }
+      .gallery-grid img { grid-column:auto !important; grid-row:auto !important; }
+      .gallery-grid img.g-wide { grid-column:span 2 !important; }
+      .mobile-bar { display:flex !important; }
+      .booking-shell { padding-bottom:110px !important; }
+      .diff-grid { gap:1px !important; }
+    }
+    @media (max-width:520px) {
+      .site-wordmark { font-size:16px !important; }
+      .hero-ctas { gap:14px; }
+      .hero-primary { font-size:9.5px; letter-spacing:1.25px; }
+      .hero-secondary { font-size:9.5px; letter-spacing:1.25px; }
+      .gallery-grid { grid-template-columns:1fr !important; grid-auto-rows:220px !important; }
+      .gallery-grid img.g-wide { grid-column:auto !important; }
+      .booking-form-grid { grid-template-columns:repeat(3,1fr) !important; }
+      .svc-chips { grid-template-columns:1fr !important; }
+    }
+    @media (max-width:360px) {
+      .hero-kicker { font-size:7.5px; letter-spacing:1.35px; }
+      .hero-ctas {
+        display:grid;
+        grid-template-columns:1fr;
+        gap:9px;
+      }
+      .hero-primary { width:100%; }
+      .hero-secondary { width:max-content; padding-top:11px; }
+      .hero-fact { padding:0 9px; }
+      .hero-fact span { font-size:7.5px; }
+    }
+    @media (max-width:900px) {
+      .info-bar > div { padding:28px 26px !important; }
+    }
+    @media (max-width:860px) {
+      .info-bar { grid-template-columns:repeat(2,1fr) !important; }
+      .info-bar > div { border-bottom:1px solid var(--line); }
+      .info-bar > div:nth-child(2) { border-right:0 !important; }
+      .info-bar > div:nth-child(3), .info-bar > div:nth-child(4) { border-bottom:0; }
+    }
+    @media (max-width:520px) {
+      .info-bar { grid-template-columns:1fr !important; }
+      .info-bar > div { border-right:0 !important; border-bottom:1px solid var(--line) !important; padding:24px 20px !important; }
+      .info-bar > div:last-child { border-bottom:0 !important; }
+      .contact-map { height:320px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+      .hero-video { transform:none; }
+    }
+    @keyframes heroMediaRevealMobile {
+      from { opacity:0; clip-path:polygon(100% 0,100% 0,100% 100%,100% 90%); }
+      to { opacity:1; clip-path:polygon(0 0,100% 0,100% 100%,0 90%); }
+    }
+  </style>
+</helmet>
+
+<div class="site {{ rootAccent }}" style="background:var(--ink); color:var(--bone); font-family:var(--ui); min-height:100vh;">
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav-shell {{ navShellClass }}" data-screen-label="Navegação" style="position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:0 40px; border-bottom:1px solid var(--line);">
+    <a href="#topo" class="site-wordmark" style="display:flex; align-items:center; gap:13px; color:var(--bone); font-family:var(--ui); font-weight:700; font-size:19px; letter-spacing:.26em; text-transform:uppercase;">
+      <span class="brand-mark" aria-hidden="true" style="display:inline-flex; width:20px; height:24px;">
+        <svg viewBox="0 0 20 24" style="display:block; width:100%; height:100%;">
+          <rect x="1.5" y="2" width="2.6" height="20" fill="var(--bone)"></rect>
+          <rect x="8.7" y="0.5" width="2.6" height="23" fill="var(--brass)"></rect>
+          <rect x="15.9" y="2" width="2.6" height="20" fill="var(--bone)"></rect>
+        </svg>
+      </span>
+      Navalha
+    </a>
+    <button type="button" class="nav-toggle" onClick="{{ toggleNav }}" aria-label="Abrir menu" aria-expanded="{{ navOpen }}">☰</button>
+    <div class="nav-menu">
+      <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="3">
+        <a href="{{ l.href }}" class="nav-link" aria-current="{{ l.current }}" onClick="{{ closeNav }}" style="color:var(--smoke); font-size:12px; font-weight:600; letter-spacing:1.6px; text-transform:uppercase;">{{ l.label }}</a>
+      </sc-for>
+      <a href="#agendar" class="btn-primary nav-cta" onClick="{{ closeNav }}" style="background:var(--brass); color:var(--ink); font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; padding:11px 20px; border:1px solid var(--brass); border-radius:var(--r);">Agendar</a>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="topo" class="hero-premium" data-screen-label="Hero">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-ghost" aria-hidden="true">N</div>
+
+    <div class="hero-media">
+      <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" poster="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&amp;w=2000&amp;auto=format&amp;fit=crop">
+        <source src="./hero.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="hero-video-toggle" onClick="{{ toggleHeroVideo }}" aria-label="{{ heroVideoLabel }}" title="{{ heroVideoLabel }}">{{ heroVideoSymbol }}</button>
+      <span class="hero-media-code" aria-hidden="true">Ofício em movimento · 01</span>
+      <div class="hero-media-caption" aria-hidden="true">
+        <small>Sem atalhos</small>
+        <strong>Precisão em cada detalhe.</strong>
+      </div>
+    </div>
+
+    <div class="shell hero-shell">
+      <div class="hero-stage">
+        <div class="hero-copy">
+          <div class="hero-kicker"><em>Desde 2016</em> · Barbearia de autor em São Paulo</div>
+          <h1 class="hero-title">
+            <span class="hero-title-line"><span>NAVALHA</span></span>
+            <span class="hero-title-line hero-title-line--offset"><span><em>Barbearia</em></span></span>
+          </h1>
+
+          <div class="hero-intro">
+            <span class="hero-intro-rule" aria-hidden="true"></span>
+            <div>
+              <p class="hero-sub">Corte, barba e acabamento na navalha — feitos sem correria, com a técnica e o tempo que o ofício de verdade pede.</p>
+              <div class="hero-ctas">
+                <a href="#agendar" class="hero-primary">
+                  <span>Agendar horário</span>
+                  <span class="hero-primary-arrow" aria-hidden="true">↗</span>
+                </a>
+                <a href="#servicos" class="hero-secondary">Ver serviços <span aria-hidden="true">↓</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-seal" aria-hidden="true">
+          <svg class="hero-seal-orbit" viewBox="0 0 132 132">
+            <defs>
+              <path id="heroSealPath" d="M 66,66 m -49,0 a 49,49 0 1,1 98,0 a 49,49 0 1,1 -98,0"></path>
+            </defs>
+            <text>
+              <textPath href="#heroSealPath">TÉCNICA · TEMPO · PRECISÃO · </textPath>
+            </text>
+          </svg>
+          <span class="hero-seal-core"><i></i><i></i><i></i></span>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-facts">
+          <div class="hero-fact"><small>01</small><span>Consolação · SP</span></div>
+          <div class="hero-fact"><small>02</small><span>Seg — Sáb · 9h — 20h</span></div>
+          <div class="hero-fact"><small>03</small><span>Corte · barba · navalha</span></div>
+        </div>
+        <a class="hero-scroll" href="#contato"><span>Explore</span><i class="hero-scroll-line" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ONDE FICAMOS ===================== -->
+  <section id="contato" data-screen-label="Onde ficamos" style="background:var(--ink); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="info-bar" style="display:grid; grid-template-columns:repeat(4,1fr);">
+      <div style="padding:34px 40px; border-right:1px solid var(--line);">
+        <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Endereço</span>
+        <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.55; color:var(--bone);">Rua Augusta, 1472 — Consolação<br>São Paulo · SP</p>
+      </div>
+      <div style="padding:34px 40px; border-right:1px solid var(--line);">
+        <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Horários</span>
+        <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.7; color:var(--bone);">Seg a Sex · 9h às 20h<br>Sábado · 9h às 18h<br><span style="color:var(--smoke-dim);">Domingo · fechado</span></p>
+      </div>
+      <div style="padding:34px 40px; border-right:1px solid var(--line);">
+        <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Contato</span>
+        <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.7; color:var(--bone);">(11) 3256-4780<br><a href="https://wa.me/5511981234567" style="color:var(--bone);">WhatsApp (11) 98123-4567</a></p>
+      </div>
+      <div style="padding:34px 40px;">
+        <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Destaque</span>
+        <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.55; color:var(--bone);">A um quarteirão da Avenida Paulista</p>
+      </div>
+    </div>
+    <div class="contact-map" style="position:relative; height:440px; background:var(--carbon);">
+      <iframe title="Mapa — Navalha Barbearia" src="https://www.google.com/maps?q=Rua+Augusta+1472+Consola%C3%A7%C3%A3o+S%C3%A3o+Paulo&output=embed" style="width:100%; height:100%; border:0; display:block;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </section>
+
+  <!-- ===================== SERVIÇOS ===================== -->
+  <section id="servicos" data-screen-label="Serviços e preços" style="background:var(--carbon);">
+    <div class="shell sec" style="padding-top:100px; padding-bottom:96px;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:52px;">
+        <div>
+          <span class="kicker"><b>01</b>A tabela</span>
+          <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Serviços &amp; preços</h2>
+        </div>
+        <p style="max-width:340px; margin:0; font-family:var(--ui); font-size:15px; line-height:1.6; color:var(--smoke); text-wrap:pretty;">Sem pressa e sem enrolação. Todo serviço inclui finalização e produto da casa.</p>
+      </div>
+
+      <!-- Serviço em destaque -->
+      <div class="featured" style="margin-bottom:44px;">
+        <div class="featured-grid" style="display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); border:1px solid var(--line-2); background:var(--carbon);">
+          <div class="featured-media" style="position:relative; min-height:340px; overflow:hidden;">
+            <img class="featured-img" src="{{ featured.img }}" alt="{{ featured.name }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+            <div style="position:absolute; inset:0; background:linear-gradient(120deg, rgba(11,11,12,.15), rgba(11,11,12,.55));"></div>
+            <span style="position:absolute; top:18px; left:18px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; color:var(--ink); background:var(--brass); padding:6px 11px;">Mais pedido</span>
+          </div>
+          <div style="padding:clamp(28px,4vw,46px); display:flex; flex-direction:column; justify-content:center; gap:14px;">
+            <span class="kicker">O ritual completo</span>
+            <h3 style="margin:0; font-family:var(--serif); font-weight:700; font-size:clamp(30px,3.6vw,42px); line-height:1; letter-spacing:-.01em; color:var(--bone);">{{ featured.name }}</h3>
+            <p style="margin:2px 0 0; font-family:var(--ui); font-size:15px; line-height:1.62; color:var(--bone-dim); max-width:42ch;">{{ featured.longDesc }}</p>
+            <div style="display:flex; align-items:baseline; gap:16px; margin-top:14px; padding-top:20px; border-top:1px solid var(--line);">
+              <span style="font-family:var(--serif); font-weight:700; font-size:38px; line-height:1; color:var(--brass);">R$ {{ featured.price }}</span>
+              <span style="font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--smoke);">{{ featured.dur }}</span>
+              <a href="#agendar" style="margin-left:auto; font-family:var(--ui); font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--brass);">Agendar →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela de preços -->
+      <div>
+        <sc-for list="{{ tabela }}" as="s" hint-placeholder-count="5">
+          <div class="tabela-row" style="display:flex; align-items:baseline; gap:20px; padding:20px 14px; border-bottom:1px solid var(--line);">
+            <div style="min-width:0;">
+              <span class="tabela-name" style="font-family:var(--serif); font-weight:600; font-size:clamp(21px,2.6vw,27px); color:var(--bone);">{{ s.name }}</span>
+              <span style="display:block; margin-top:4px; font-family:var(--ui); font-size:13.5px; line-height:1.5; color:var(--smoke);">{{ s.desc }}</span>
+            </div>
+            <span style="flex:1; min-width:20px; align-self:center; border-bottom:1px dotted var(--line-2); transform:translateY(-3px);"></span>
+            <span style="flex:0 0 auto; font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--smoke); min-width:60px; text-align:right;">{{ s.dur }}</span>
+            <span style="flex:0 0 auto; font-family:var(--ui); font-weight:700; font-size:18px; color:var(--bone-dim); min-width:74px; text-align:right;">R$ {{ s.price }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== AGENDAMENTO ===================== -->
+  <section id="agendar" data-screen-label="Agendamento" style="background:var(--ink); border-top:1px solid var(--line);">
+    <div class="shell sec booking-shell" style="padding-top:100px; padding-bottom:100px;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
+        <div>
+          <span class="kicker"><b>02</b>Agendamento</span>
+          <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Marque seu horário</h2>
+        </div>
+        <sc-if value="{{ notBooked }}" hint-placeholder-val="{{ true }}">
+          <p style="max-width:300px; margin:0; font-family:var(--ui); font-size:14px; line-height:1.55; color:var(--smoke);">{{ progressLabel }}</p>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ notBooked }}" hint-placeholder-val="{{ true }}">
+        <div class="booking-layout" style="display:grid; grid-template-columns:1.55fr 1fr; gap:52px; align-items:start;">
+          <div style="display:flex; flex-direction:column; gap:44px;">
+
+            <div style="display:flex; flex-direction:column; gap:18px;">
+              <div style="display:flex; align-items:baseline; gap:13px;">
+                <span style="font-family:var(--serif); font-weight:600; font-size:22px; color:var(--smoke-dim);">01</span>
+                <span style="font-family:var(--ui); font-size:14px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--bone);">Escolha o serviço</span>
+                <span style="margin-left:auto; font-family:var(--ui); font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:{{ serviceStatusColor }};">{{ serviceStatus }}</span>
+              </div>
+              <div class="svc-chips" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px;">
+                <sc-for list="{{ svcChips }}" as="c" hint-placeholder-count="6">
+                  <button type="button" class="chip" onClick="{{ c.onPick }}" style="{{ c.style }}">
+                    <span style="display:block; font-family:var(--ui); font-size:15px; font-weight:600; color:var(--bone);">{{ c.name }}</span>
+                    <span style="display:block; margin-top:3px; font-family:var(--ui); font-size:13px; color:var(--smoke);">R$ {{ c.price }} · {{ c.dur }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{ serviceChosen }}">
+            <div style="display:flex; flex-direction:column; gap:18px;">
+              <div style="display:flex; align-items:baseline; gap:13px; flex-wrap:wrap;">
+                <span style="font-family:var(--serif); font-weight:600; font-size:22px; color:var(--smoke-dim);">02</span>
+                <span style="font-family:var(--ui); font-size:14px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--bone);">Escolha o dia</span>
+                <span style="font-family:var(--ui); font-size:13px; color:var(--smoke);">domingo fechado</span>
+                <span style="margin-left:auto; font-family:var(--ui); font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:{{ dayStatusColor }};">{{ dayStatus }}</span>
+              </div>
+              <div style="display:flex; gap:9px; overflow-x:auto; padding-bottom:6px;">
+                <sc-for list="{{ days }}" as="d" hint-placeholder-count="8">
+                  <button type="button" class="daychip" onClick="{{ d.onPick }}" style="{{ d.style }}">
+                    <span style="display:block; font-family:var(--ui); font-size:10.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--smoke);">{{ d.dow }}</span>
+                    <span style="display:block; margin-top:3px; font-family:var(--serif); font-weight:600; font-size:27px; color:var(--bone);">{{ d.dayNum }}</span>
+                    <span style="display:block; font-family:var(--ui); font-size:10.5px; letter-spacing:.5px; text-transform:uppercase; color:var(--smoke);">{{ d.month }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ dayChosen }}">
+            <div style="display:flex; flex-direction:column; gap:18px;">
+              <div style="display:flex; align-items:baseline; gap:13px; flex-wrap:wrap;">
+                <span style="font-family:var(--serif); font-weight:600; font-size:22px; color:var(--smoke-dim);">03</span>
+                <span style="font-family:var(--ui); font-size:14px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--bone);">Escolha o horário</span>
+                <span style="margin-left:auto; font-family:var(--ui); font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:{{ timeStatusColor }};">{{ timeStatus }}</span>
+              </div>
+              <div class="booking-form-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:8px;">
+                <sc-for list="{{ times }}" as="t" hint-placeholder-count="12">
+                  <button type="button" class="time-slot" onClick="{{ t.onPick }}" disabled="{{ t.disabled }}" aria-disabled="{{ t.disabled }}" style="{{ t.style }}">{{ t.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            </sc-if>
+          </div>
+
+          <div id="booking-summary" class="summary" style="position:sticky; top:100px; background:var(--carbon); border:1px solid var(--line-2); padding:30px;">
+            <h3 style="margin:0 0 22px; font-family:var(--serif); font-weight:600; font-size:26px; letter-spacing:-.01em; color:var(--bone);">Resumo</h3>
+            <div style="display:flex; flex-direction:column; gap:13px; margin-bottom:24px;">
+              <div style="display:flex; justify-content:space-between; gap:12px; font-family:var(--ui); font-size:14px;"><span style="color:var(--smoke);">Serviço</span><span style="color:var(--bone); font-weight:600; text-align:right;">{{ resumoServico }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-family:var(--ui); font-size:14px;"><span style="color:var(--smoke);">Dia</span><span style="color:var(--bone); font-weight:600; text-align:right;">{{ resumoDia }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-family:var(--ui); font-size:14px;"><span style="color:var(--smoke);">Horário</span><span style="color:var(--bone); font-weight:600; text-align:right;">{{ resumoHora }}</span></div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; border-top:1px solid var(--line); padding-top:14px; font-family:var(--ui); font-size:14px;"><span style="color:var(--smoke);">Valor</span><span style="font-family:var(--serif); font-weight:700; font-size:24px; color:var(--brass);">{{ resumoValor }}</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:18px;">
+              <label class="field" style="display:flex; flex-direction:column; gap:7px;">
+                <span style="font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--smoke);">Seu nome</span>
+                <input type="text" value="{{ nome }}" onChange="{{ onNome }}" placeholder="Como te chamamos" autocomplete="name" required aria-required="true" aria-invalid="{{ nomeInvalid }}" style="width:100%; background:var(--ink); border:1px solid {{ nomeBorder }}; color:var(--bone); padding:14px 15px; font-family:var(--ui); font-size:14px; border-radius:var(--r); transition:border-color .15s;">
+                <span style="min-height:15px; font-family:var(--ui); font-size:11px; line-height:1.4; color:var(--error);">{{ nomeHint }}</span>
+              </label>
+              <label class="field" style="display:flex; flex-direction:column; gap:7px;">
+                <span style="font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--smoke);">WhatsApp <em style="font-style:normal; font-weight:400; letter-spacing:0; text-transform:none; color:var(--smoke-dim);">(opcional)</em></span>
+                <input type="tel" value="{{ zap }}" onChange="{{ onZap }}" placeholder="(11) 90000-0000" autocomplete="tel" inputmode="tel" style="width:100%; background:var(--ink); border:1px solid var(--line-2); color:var(--bone); padding:14px 15px; font-family:var(--ui); font-size:14px; border-radius:var(--r); transition:border-color .15s;">
+              </label>
+            </div>
+            <p style="min-height:18px; margin:0 0 12px; font-family:var(--ui); font-size:12px; line-height:1.45; color:var(--smoke);">{{ formHint }}</p>
+            <button type="button" class="confirm-button" onClick="{{ onConfirm }}" disabled="{{ confirmDisabled }}" aria-disabled="{{ confirmDisabled }}" style="{{ confirmStyle }}">{{ confirmLabel }}</button>
+            <p style="margin:14px 0 0; font-family:var(--ui); font-size:12px; line-height:1.5; color:var(--smoke-dim);">Você recebe a confirmação no WhatsApp. Cancelamento gratuito até 2h antes.</p>
+          </div>
+        </div>
+        <sc-if value="{{ serviceChosen }}">
+          <div class="mobile-bar" style="display:none; position:fixed; left:0; right:0; bottom:0; z-index:40; align-items:center; justify-content:space-between; gap:16px; padding:12px 20px calc(12px + env(safe-area-inset-bottom)); background:rgba(18,18,22,.98); border-top:1px solid var(--line-2); box-shadow:0 -10px 26px rgba(0,0,0,.3);">
+            <div style="min-width:0; font-family:var(--ui); color:var(--smoke); font-size:12px; line-height:1.35;"><strong style="display:block; overflow:hidden; color:var(--bone); font-size:13px; text-overflow:ellipsis; white-space:nowrap;">{{ resumoServico }}</strong><span>{{ resumoDia }} · {{ resumoHora }}</span></div>
+            <a href="#booking-summary" style="flex:0 0 auto; padding:11px 15px; background:var(--brass); color:var(--ink); border-radius:var(--r); font-family:var(--ui); font-size:12px; font-weight:700; letter-spacing:.8px; text-transform:uppercase;">Revisar</a>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ booked }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:540px; margin:0 auto; text-align:center; background:var(--carbon); border:1px solid var(--brass-deep); padding:56px 40px;">
+          <div style="width:60px; height:60px; margin:0 auto 24px; border:1px solid var(--brass); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--brass);">✓</div>
+          <h3 style="margin:0 0 12px; font-family:var(--serif); font-weight:700; font-size:38px; letter-spacing:-.01em; color:var(--bone);">Horário marcado</h3>
+          <p style="margin:0 0 8px; font-family:var(--ui); font-size:16px; line-height:1.6; color:var(--bone-dim);">{{ resumoNome }}, te esperamos:</p>
+          <p style="margin:0 0 32px; font-family:var(--ui); font-size:18px; font-weight:600; color:var(--bone);">{{ resumoServico }} — {{ resumoDia }}, {{ resumoHora }}</p>
+          <div class="success-actions" style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px;">
+            <button type="button" onClick="{{ onReset }}" class="btn-ghost" style="background:none; border:1px solid var(--line-2); color:var(--bone); font-family:var(--ui); font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:14px 26px; cursor:pointer; border-radius:var(--r); transition:border-color .15s, color .15s;">Novo agendamento</button>
+            <a class="success-link" href="#contato" style="display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--brass-deep); color:var(--brass); font-family:var(--ui); font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:14px 22px; border-radius:var(--r); transition:border-color .15s, color .15s;">Ver contato</a>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- ===================== GALERIA ===================== -->
+  <section id="galeria" data-screen-label="Galeria" style="background:var(--carbon); border-top:1px solid var(--line);">
+    <div class="shell sec" style="padding-top:100px; padding-bottom:100px;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
+        <div>
+          <span class="kicker"><b>03</b>O trabalho</span>
+          <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Fala por si</h2>
+        </div>
+        <a href="#agendar" style="font-family:var(--ui); font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--brass);">Quero um desses →</a>
+      </div>
+      <div class="gallery-grid" style="display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:220px; gap:8px;">
+        <img class="{{ galleryClass }} g-wide" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200&auto=format&fit=crop" alt="Interior da barbearia" style="grid-column:span 2; grid-row:span 2; width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=900&auto=format&fit=crop" alt="Corte degradê" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=900&auto=format&fit=crop" alt="Ferramentas de barbeiro" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?q=80&w=900&auto=format&fit=crop" alt="Barba na navalha" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1567894340315-735d7c361db0?q=80&w=900&auto=format&fit=crop" alt="Cadeira de barbeiro" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=900&auto=format&fit=crop" alt="Mãos do barbeiro" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }} g-wide" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200&auto=format&fit=crop" alt="Interior do salão" style="grid-column:span 2; width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=900&auto=format&fit=crop" alt="Corte moderno" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }} g-wide" src="https://images.unsplash.com/photo-1493256338651-d82f7acb2b38?q=80&w=1200&auto=format&fit=crop" alt="Cliente na cadeira" style="grid-column:span 2; width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1647140655214-e4a2d914971f?q=80&w=900&auto=format&fit=crop" alt="Acabamento na navalha" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=900&auto=format&fit=crop" alt="Barbeiro em ação" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="background:var(--ink); border-top:1px solid var(--line);">
+    <div class="shell" style="padding-top:30px; padding-bottom:30px; display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;">
+      <span style="font-family:var(--ui); font-weight:700; font-size:16px; letter-spacing:.24em; text-transform:uppercase; color:var(--smoke);">Navalha</span>
+      <span style="font-family:var(--ui); font-size:13px; color:var(--smoke-dim);">Barbearia de autor desde 2016 · Feito na régua</span>
+      <a href="https://instagram.com/navalha.barbearia" style="font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--smoke);">@navalha.barbearia</a>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Latão&quot;,&quot;options&quot;:[&quot;Latão&quot;,&quot;Cobre&quot;,&quot;Aço frio&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estilo&quot;},&quot;galleryTreatment&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Sempre colorido&quot;,&quot;options&quot;:[&quot;Sempre colorido&quot;,&quot;P&amp;B → cor&quot;,&quot;Sempre P&amp;B&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estilo&quot;},&quot;featuredService&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Combo Corte + Barba&quot;,&quot;options&quot;:[&quot;Corte&quot;,&quot;Barba&quot;,&quot;Combo Corte + Barba&quot;,&quot;Pezinho&quot;,&quot;Sobrancelha&quot;,&quot;Combo Completo&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Conteúdo&quot;}}">
+class Component extends DCLogic {
+  state = { service: null, dayKey: null, time: null, nome: '', zap: '', booked: false, confirming: false, navOpen: false, activeSection: '', heroVideoPaused: false };
+
+  componentDidMount() {
+    this._heroVideo = document.querySelector('video.hero-video');
+    if (this._heroVideo) {
+      this._heroVideo.muted = true;
+      this._heroVideo.loop = true;
+      this._onHeroEnded = () => {
+        if (this.state.heroVideoPaused || !this._heroVideo) return;
+        this._heroVideo.currentTime = 0;
+        const p = this._heroVideo.play();
+        if (p && p.catch) p.catch(() => {});
+      };
+      this._heroVideo.addEventListener('ended', this._onHeroEnded);
+    }
+    this._onVisibility = () => { if (!document.hidden) this._play(); };
+    document.addEventListener('visibilitychange', this._onVisibility);
+    this._play();
+    [200, 700, 1600].forEach((t) => setTimeout(() => this._play(), t));
+    this._onScroll = () => {
+      const ids = ['contato', 'servicos', 'agendar', 'galeria'];
+      const y = window.scrollY + 150;
+      let active = '', best = -1;
+      ids.forEach((id) => { const el = document.getElementById(id); if (el && el.offsetTop <= y && el.offsetTop > best) { best = el.offsetTop; active = id; } });
+      if (active !== this.state.activeSection) this.setState({ activeSection: active });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._onVisibility) document.removeEventListener('visibilitychange', this._onVisibility);
+    if (this._heroVideo && this._onHeroEnded) this._heroVideo.removeEventListener('ended', this._onHeroEnded);
+  }
+  _play() {
+    const v = this._heroVideo || document.querySelector('video.hero-video');
+    if (!v || this.state.heroVideoPaused) return;
+    v.muted = true;
+    v.loop = true;
+    if (v.ended) v.currentTime = 0;
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+  _pauseHeroVideo() {
+    const v = document.querySelector('video.hero-video');
+    if (v) v.pause();
+  }
+  _toggleHeroVideo() {
+    const v = document.querySelector('video.hero-video');
+    if (!v) return;
+    if (v.paused) {
+      v.muted = true;
+      v.loop = true;
+      if (v.ended) v.currentTime = 0;
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {});
+      this.setState({ heroVideoPaused: false });
+    } else {
+      v.pause();
+      this.setState({ heroVideoPaused: true });
+    }
+  }
+
+  getServices() {
+    return [
+      { id: 'corte',       name: 'Corte',              desc: 'Tesoura ou máquina, acabamento na navalha.',  price: '45', dur: '45 min', img: 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=900&auto=format&fit=crop' },
+      { id: 'barba',       name: 'Barba',              desc: 'Toalha quente, navalha e finalização.',       price: '35', dur: '30 min', img: 'https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?q=80&w=900&auto=format&fit=crop' },
+      { id: 'combo',       name: 'Combo Corte + Barba', desc: 'Corte e barba na mesma cadeira, sem pressa.', longDesc: 'Corte completo e barba trabalhada na navalha com toalha quente. O programa da casa para sair impecável dos dois lados.', price: '70', dur: '1h15', destaque: true, img: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1200&auto=format&fit=crop' },
+      { id: 'pezinho',     name: 'Pezinho',            desc: 'Acabamento de contorno na régua.',             price: '15', dur: '15 min', img: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=900&auto=format&fit=crop' },
+      { id: 'sobrancelha', name: 'Sobrancelha',        desc: 'Alinhamento e limpeza na navalha.',            price: '20', dur: '15 min', img: 'https://images.unsplash.com/photo-1567894340315-735d7c361db0?q=80&w=900&auto=format&fit=crop' },
+      { id: 'completo',    name: 'Combo Completo',     desc: 'Corte, barba e sobrancelha em um só horário.', price: '85', dur: '1h30', img: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200&auto=format&fit=crop' },
+    ];
+  }
+
+  getDiffs() {
+    return [
+      { num: '01', title: 'Técnica precisa', copy: 'Acabamento pensado nos detalhes, do primeiro movimento à finalização na navalha.' },
+      { num: '02', title: 'Sem pressa',      copy: 'Cada horário tem espaço para fazer bem feito e respeitar o seu tempo.' },
+      { num: '03', title: 'Assinatura própria', copy: 'Um resultado consistente para você sair da cadeira reconhecível.' },
+    ];
+  }
+
+  getDays() {
+    const out = []; const d = new Date();
+    while (out.length < 10) { if (d.getDay() !== 0) out.push(new Date(d)); d.setDate(d.getDate() + 1); }
+    return out;
+  }
+
+  renderVals() {
+    const S = this.state;
+    const accent = this.props.accent || 'Latão';
+    const rootAccent = accent === 'Cobre' ? 'accent-cobre' : accent === 'Aço frio' ? 'accent-aco' : '';
+    const gt = this.props.galleryTreatment || 'Sempre colorido';
+    const galleryClass = gt === 'Sempre colorido' ? 'gimg-color' : gt === 'Sempre P&B' ? 'gimg-bw' : 'gimg-hover';
+
+    const services = this.getServices();
+    const featuredName = this.props.featuredService || 'Combo Corte + Barba';
+    const featured = services.find((s) => s.name === featuredName) || services.find((s) => s.destaque) || services[0];
+    const tabela = services.filter((s) => s !== featured);
+
+    const dows = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+    const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
+    const chipBase = (sel) => ({
+      border: sel ? '1px solid var(--brass)' : '1px solid var(--line-2)',
+      background: sel ? 'rgba(193,151,75,0.14)' : 'var(--graphite)',
+      cursor: 'pointer', fontFamily: 'var(--ui)', textAlign: 'left',
+      padding: '14px 16px', borderRadius: 'var(--r)',
+      transition: 'border-color .18s, background .18s',
+    });
+
+    const svcChips = services.map((s) => ({ ...s, style: chipBase(S.service === s.id), onPick: () => this.setState({ service: s.id }) }));
+
+    const dayDates = this.getDays();
+    const days = dayDates.map((d, i) => {
+      const key = d.toISOString().slice(0, 10);
+      const sel = S.dayKey === key;
+      return {
+        key, dow: i === 0 ? 'hoje' : dows[d.getDay()],
+        dayNum: String(d.getDate()).padStart(2, '0'), month: months[d.getMonth()],
+        style: { ...chipBase(sel), textAlign: 'center', minWidth: '72px', flexShrink: 0, padding: '12px 10px' },
+        onPick: () => this.setState({ dayKey: key, time: null }),
+      };
+    });
+
+    const dayIdx = Math.max(0, dayDates.findIndex((d) => d.toISOString().slice(0, 10) === S.dayKey));
+    const slots = ['09:00', '09:45', '10:30', '11:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00'];
+    const times = slots.map((label, i) => {
+      const taken = ((dayIdx + 2) * (i + 3)) % 5 === 0;
+      const sel = S.time === label;
+      return {
+        label, disabled: taken || !S.dayKey,
+        style: { ...chipBase(sel), textAlign: 'center', padding: '12px 8px', fontSize: '14px', fontWeight: 600, color: sel ? 'var(--bone)' : 'var(--bone-dim)' },
+        onPick: taken || !S.dayKey ? null : () => this.setState({ time: label }),
+      };
+    });
+
+    const svc = services.find((s) => s.id === S.service);
+    const selDay = dayDates.find((d) => d.toISOString().slice(0, 10) === S.dayKey);
+    const resumoDia = selDay ? dows[selDay.getDay()] + ', ' + String(selDay.getDate()).padStart(2, '0') + ' ' + months[selDay.getMonth()] : '—';
+
+    const nameComplete = !!S.nome.trim();
+    const canConfirm = !!(S.service && S.dayKey && S.time && nameComplete);
+    const nomeInvalid = !!(S.service && S.dayKey && S.time && !nameComplete);
+
+    const progressLabel = S.service
+      ? S.dayKey
+        ? S.time
+          ? (nameComplete ? 'Tudo certo — é só confirmar.' : 'Último passo: informe seu nome.')
+          : 'Agora escolha um horário disponível.'
+        : 'Boa. Agora escolha o melhor dia.'
+      : 'Comece escolhendo o serviço.';
+    const formHint = canConfirm ? 'Tudo certo. Revise e confirme seu horário.'
+      : !S.service ? 'Escolha um serviço para continuar.'
+      : !S.dayKey ? 'Escolha um dia disponível.'
+      : !S.time ? 'Escolha um horário disponível.'
+      : 'Informe seu nome para confirmar.';
+
+    const sc = (v) => v ? 'var(--brass)' : 'var(--smoke-dim)';
+
+    const navSections = [
+      { href: '#servicos', label: 'Serviços', id: 'servicos' },
+      { href: '#galeria', label: 'Galeria', id: 'galeria' },
+      { href: '#contato', label: 'Contato', id: 'contato' },
+    ];
+    const navLinks = navSections.map((s) => ({ ...s, current: S.activeSection === s.id ? 'page' : false }));
+
+    return {
+      rootAccent, galleryClass, featured, tabela, svcChips, days, times, diffs: this.getDiffs(),
+      navLinks, navOpen: S.navOpen, navShellClass: S.navOpen ? 'nav-open' : '',
+      toggleNav: () => this.setState((s) => ({ navOpen: !s.navOpen })),
+      closeNav: () => this.setState({ navOpen: false }),
+      toggleHeroVideo: () => this._toggleHeroVideo(),
+      heroVideoLabel: S.heroVideoPaused ? 'Reproduzir vídeo do hero' : 'Pausar vídeo do hero',
+      heroVideoSymbol: S.heroVideoPaused ? '▶' : 'Ⅱ',
+      nome: S.nome, zap: S.zap,
+      onNome: (e) => this.setState({ nome: e.target.value }),
+      onZap: (e) => this.setState({ zap: e.target.value }),
+      booked: S.booked, notBooked: !S.booked,
+      serviceChosen: !!S.service, dayChosen: !!S.dayKey,
+      serviceStatus: S.service ? 'selecionado' : 'obrigatório',
+      dayStatus: S.dayKey ? 'selecionado' : 'obrigatório',
+      timeStatus: S.time ? 'selecionado' : 'obrigatório',
+      serviceStatusColor: sc(S.service), dayStatusColor: sc(S.dayKey), timeStatusColor: sc(S.time),
+      resumoServico: svc ? svc.name : '—', resumoDia, resumoHora: S.time || '—',
+      resumoValor: svc ? 'R$ ' + svc.price : '—',
+      resumoNome: S.nome.trim() ? S.nome.trim().split(' ')[0] : '',
+      progressLabel, nomeInvalid, nomeHint: nomeInvalid ? 'Informe seu nome para liberar a confirmação.' : '',
+      nomeBorder: nomeInvalid ? 'var(--error)' : 'var(--line-2)', formHint,
+      confirmDisabled: !canConfirm || S.confirming,
+      confirmLabel: S.confirming ? 'Confirmando…' : 'Confirmar agendamento',
+      confirmStyle: {
+        width: '100%', background: canConfirm ? 'var(--brass)' : 'var(--ash)',
+        color: canConfirm ? 'var(--ink)' : 'var(--smoke-dim)', border: 'none',
+        fontFamily: 'var(--ui)', fontSize: '13px', fontWeight: 700, letterSpacing: '1.4px',
+        textTransform: 'uppercase', padding: '16px', borderRadius: 'var(--r)',
+        cursor: canConfirm && !S.confirming ? 'pointer' : 'default', opacity: S.confirming ? 0.72 : 1,
+        transition: 'background .18s',
+      },
+      onConfirm: () => {
+        if (!canConfirm || S.confirming) return;
+        this.setState({ confirming: true });
+        setTimeout(() => this.setState({ booked: true, confirming: false }), 450);
+      },
+      onReset: () => this.setState({ service: null, dayKey: null, time: null, nome: '', zap: '', booked: false, confirming: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>
