@@ -544,6 +544,234 @@
       100% { transform:translateX(100%); }
     }
 
+    /* Scroll motion system — progressive, GPU-friendly and disabled without JS. */
+    .site.motion-ready .nav-shell {
+      transition:height .35s cubic-bezier(.22,1,.36,1), background .35s ease, box-shadow .35s ease;
+    }
+    .site.motion-ready .nav-shell.is-scrolled {
+      height:64px;
+      background:rgba(8,8,9,.9) !important;
+      box-shadow:0 14px 42px rgba(0,0,0,.22);
+    }
+    .scroll-progress {
+      position:fixed;
+      z-index:49;
+      top:72px;
+      right:0;
+      bottom:0;
+      width:2px;
+      overflow:hidden;
+      pointer-events:none;
+      background:rgba(236,231,222,.06);
+    }
+    .scroll-progress span {
+      display:block;
+      width:100%;
+      height:100%;
+      transform:scaleY(var(--page-progress,0));
+      transform-origin:top;
+      background:linear-gradient(180deg,var(--brass-hi),var(--brass-deep));
+      box-shadow:0 0 14px rgba(193,151,75,.38);
+      will-change:transform;
+    }
+    .scroll-progress-label {
+      position:fixed;
+      z-index:48;
+      right:18px;
+      bottom:22px;
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      pointer-events:none;
+      font-family:var(--ui);
+      color:var(--smoke);
+    }
+    .scroll-progress-label small {
+      font-size:8px;
+      font-weight:700;
+      letter-spacing:2px;
+    }
+    .scroll-progress-label b {
+      min-width:24px;
+      font-family:var(--serif);
+      font-size:13px;
+      font-style:italic;
+      font-weight:500;
+      color:var(--brass-hi);
+    }
+    .hero-media,
+    .hero-copy,
+    .hero-grid,
+    .hero-ghost {
+      will-change:transform;
+    }
+    .site.motion-ready .hero-media {
+      transform:translate3d(0,calc(var(--hero-progress,0) * -26px),0);
+    }
+    .site.motion-ready .hero-copy {
+      transform:translate3d(0,calc(var(--hero-progress,0) * -18px),0);
+      opacity:var(--hero-opacity,1);
+    }
+    .site.motion-ready .hero-grid {
+      transform:translate3d(calc(var(--hero-progress,0) * -16px),0,0);
+    }
+    .site.motion-ready .hero-ghost {
+      transform:translate3d(0,calc(var(--hero-progress,0) * 34px),0);
+    }
+
+    .motion-section {
+      position:relative;
+      isolation:isolate;
+    }
+    .motion-section > * {
+      position:relative;
+      z-index:1;
+    }
+    .motion-section::before {
+      content:'';
+      position:absolute;
+      z-index:2;
+      top:-76px;
+      right:0;
+      left:0;
+      height:152px;
+      pointer-events:none;
+      opacity:0;
+      transform:translate3d(0,22px,0);
+      transition:opacity .9s ease,transform 1.1s cubic-bezier(.22,1,.36,1);
+    }
+    .motion-section.section-ink::before {
+      background:linear-gradient(180deg,rgba(10,10,11,0),rgba(10,10,11,.64) 54%,var(--ink));
+    }
+    .motion-section.section-carbon::before {
+      background:linear-gradient(180deg,rgba(19,19,21,0),rgba(19,19,21,.66) 54%,var(--carbon));
+    }
+    .motion-section::after {
+      content:'';
+      position:absolute;
+      z-index:0;
+      top:7%;
+      left:-12%;
+      width:52vw;
+      height:42vw;
+      max-height:620px;
+      border-radius:50%;
+      pointer-events:none;
+      opacity:0;
+      transform:translate3d(0,calc((var(--section-progress,.5) - .5) * 72px),0);
+      background:radial-gradient(circle,rgba(193,151,75,.07),rgba(193,151,75,0) 68%);
+      transition:opacity 1.2s ease;
+    }
+    .motion-section.is-section-visible::before {
+      opacity:1;
+      transform:translate3d(0,0,0);
+    }
+    .motion-section.is-section-visible::after { opacity:1; }
+
+    .site.motion-ready [data-motion] {
+      opacity:0;
+      transform:translate3d(0,30px,0);
+      transition:
+        opacity .72s cubic-bezier(.22,1,.36,1),
+        transform .9s cubic-bezier(.22,1,.36,1),
+        clip-path 1s cubic-bezier(.22,1,.36,1);
+      transition-delay:var(--motion-delay,0ms);
+    }
+    .site.motion-ready [data-motion="heading"] {
+      position:relative;
+      transform:translate3d(0,36px,0);
+      clip-path:inset(0 0 22% 0);
+    }
+    .site.motion-ready [data-motion="heading"]::after {
+      content:'';
+      position:absolute;
+      right:0;
+      bottom:-18px;
+      left:0;
+      height:1px;
+      background:linear-gradient(90deg,var(--brass),rgba(193,151,75,0) 62%);
+      transform:scaleX(0);
+      transform-origin:left;
+      transition:transform 1.05s .18s cubic-bezier(.22,1,.36,1);
+    }
+    .site.motion-ready [data-motion="scale"] {
+      transform:translate3d(0,24px,0) scale(.975);
+    }
+    .site.motion-ready [data-motion="row"] {
+      transform:translate3d(24px,0,0);
+    }
+    .site.motion-ready [data-motion="image"] {
+      transform:translate3d(0,34px,0) scale(.965);
+      clip-path:inset(10% 0 10% 0);
+    }
+    .site.motion-ready [data-motion].is-revealed {
+      opacity:1;
+      transform:translate3d(0,0,0) scale(1);
+      clip-path:inset(0 0 0 0);
+    }
+    .site.motion-ready [data-motion].motion-prepared {
+      transition:filter .45s ease;
+    }
+    .site.motion-ready [data-motion="heading"].is-revealed::after {
+      transform:scaleX(1);
+    }
+
+    .info-bar > [data-motion]:nth-child(2) { --motion-delay:70ms; }
+    .info-bar > [data-motion]:nth-child(3) { --motion-delay:140ms; }
+    .info-bar > [data-motion]:nth-child(4) { --motion-delay:210ms; }
+    .tabela-row:nth-child(2) { --motion-delay:45ms; }
+    .tabela-row:nth-child(3) { --motion-delay:90ms; }
+    .tabela-row:nth-child(4) { --motion-delay:135ms; }
+    .tabela-row:nth-child(5) { --motion-delay:180ms; }
+    .gallery-grid [data-motion]:nth-child(2) { --motion-delay:45ms; }
+    .gallery-grid [data-motion]:nth-child(3) { --motion-delay:90ms; }
+    .gallery-grid [data-motion]:nth-child(4) { --motion-delay:135ms; }
+    .gallery-grid [data-motion]:nth-child(5) { --motion-delay:180ms; }
+    .gallery-grid [data-motion]:nth-child(6) { --motion-delay:225ms; }
+    .gallery-grid [data-motion]:nth-child(n+7) { --motion-delay:90ms; }
+    .gallery-grid img {
+      transition:filter .45s ease,transform .5s cubic-bezier(.22,1,.36,1);
+    }
+    .gallery-grid img.is-revealed:hover {
+      transform:translate3d(0,-4px,0) scale(1.018);
+    }
+
+    .featured-media {
+      overflow:hidden;
+    }
+    .site.motion-ready .featured-img {
+      transform:translate3d(0,calc((var(--featured-progress,.5) - .5) * -32px),0) scale(1.08);
+      transition:transform .65s cubic-bezier(.22,1,.36,1);
+    }
+    .site.motion-ready .featured:hover .featured-img {
+      transform:translate3d(0,calc((var(--featured-progress,.5) - .5) * -32px),0) scale(1.11);
+    }
+    .contact-map {
+      overflow:hidden;
+    }
+    .contact-map::after {
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      box-shadow:inset 0 24px 45px rgba(10,10,11,.3),inset 0 -18px 38px rgba(10,10,11,.18);
+    }
+    .motion-footer {
+      position:relative;
+      overflow:hidden;
+    }
+    .motion-footer::before {
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      width:0;
+      height:1px;
+      background:var(--brass);
+      transition:width 1.1s cubic-bezier(.22,1,.36,1);
+    }
+    .motion-footer.is-section-visible::before { width:100%; }
+
     @media (max-width:900px) {
       .nav-shell { padding:15px 20px !important; }
       .nav-shell::after { right:20px; }
@@ -558,6 +786,7 @@
       .hero-title { font-size:clamp(68px,11.5vw,102px); }
       .hero-fact { padding:0 18px; }
       .hero-fact:nth-child(3) { display:none; }
+      .site.motion-ready .nav-shell.is-scrolled { height:66px; }
     }
     @media (max-width:860px) {
       .featured-grid { grid-template-columns:1fr !important; }
@@ -653,6 +882,27 @@
       .mobile-bar { display:flex !important; }
       .booking-shell { padding-bottom:110px !important; }
       .diff-grid { gap:1px !important; }
+      .site.motion-ready .hero-media {
+        transform:translate3d(0,calc(var(--hero-progress,0) * -10px),0);
+      }
+      .site.motion-ready .hero-copy {
+        transform:translate3d(0,calc(var(--hero-progress,0) * -8px),0);
+      }
+      .motion-section::after { display:none; }
+      .scroll-progress { top:66px; }
+      .scroll-progress-label { right:10px; bottom:12px; }
+      .site.motion-ready [data-motion] {
+        transform:translate3d(0,20px,0);
+        transition-duration:.62s,.72s,.72s;
+      }
+      .site.motion-ready [data-motion="image"] {
+        transform:translate3d(0,20px,0) scale(.985);
+        clip-path:inset(5% 0 5% 0);
+      }
+      .site.motion-ready [data-motion].is-revealed {
+        transform:translate3d(0,0,0) scale(1);
+        clip-path:inset(0);
+      }
     }
     @media (max-width:520px) {
       .site-wordmark { font-size:16px !important; }
@@ -695,6 +945,8 @@
       html { scroll-behavior:auto; }
       *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
       .hero-video { transform:none; }
+      .motion-section::before,
+      .motion-section::after { display:none; }
     }
     @keyframes heroMediaRevealMobile {
       from { opacity:0; clip-path:polygon(100% 0,100% 0,100% 100%,100% 90%); }
@@ -704,6 +956,8 @@
 </helmet>
 
 <div class="site {{ rootAccent }}" style="background:var(--ink); color:var(--bone); font-family:var(--ui); min-height:100vh;">
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+  <div class="scroll-progress-label" aria-hidden="true"><small>Scroll</small><b>00</b></div>
 
   <!-- ===================== NAV ===================== -->
   <nav class="nav-shell {{ navShellClass }}" data-screen-label="Navegação" style="position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:0 40px; border-bottom:1px solid var(--line);">
@@ -792,34 +1046,34 @@
   </section>
 
   <!-- ===================== ONDE FICAMOS ===================== -->
-  <section id="contato" data-screen-label="Onde ficamos" style="background:var(--ink); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <section id="contato" class="motion-section section-ink" data-motion-section data-screen-label="Onde ficamos" style="background:var(--ink); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
     <div class="info-bar" style="display:grid; grid-template-columns:repeat(4,1fr);">
-      <div style="padding:34px 40px; border-right:1px solid var(--line);">
+      <div data-motion="rise" style="padding:34px 40px; border-right:1px solid var(--line);">
         <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Endereço</span>
         <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.55; color:var(--bone);">Rua Augusta, 1472 — Consolação<br>São Paulo · SP</p>
       </div>
-      <div style="padding:34px 40px; border-right:1px solid var(--line);">
+      <div data-motion="rise" style="padding:34px 40px; border-right:1px solid var(--line);">
         <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Horários</span>
         <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.7; color:var(--bone);">Seg a Sex · 9h às 20h<br>Sábado · 9h às 18h<br><span style="color:var(--smoke-dim);">Domingo · fechado</span></p>
       </div>
-      <div style="padding:34px 40px; border-right:1px solid var(--line);">
+      <div data-motion="rise" style="padding:34px 40px; border-right:1px solid var(--line);">
         <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Contato</span>
         <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.7; color:var(--bone);">(11) 3256-4780<br><a href="https://wa.me/5511981234567" style="color:var(--bone);">WhatsApp (11) 98123-4567</a></p>
       </div>
-      <div style="padding:34px 40px;">
+      <div data-motion="rise" style="padding:34px 40px;">
         <span style="display:block; margin-bottom:13px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:3.4px; text-transform:uppercase; color:var(--bone-dim);">Destaque</span>
         <p style="margin:0; font-family:var(--ui); font-size:15px; line-height:1.55; color:var(--bone);">A um quarteirão da Avenida Paulista</p>
       </div>
     </div>
-    <div class="contact-map" style="position:relative; height:440px; background:var(--carbon);">
+    <div class="contact-map" data-motion="scale" style="position:relative; height:440px; background:var(--carbon);">
       <iframe title="Mapa — Navalha Barbearia" src="https://www.google.com/maps?q=Rua+Augusta+1472+Consola%C3%A7%C3%A3o+S%C3%A3o+Paulo&output=embed" style="width:100%; height:100%; border:0; display:block;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </section>
 
   <!-- ===================== SERVIÇOS ===================== -->
-  <section id="servicos" data-screen-label="Serviços e preços" style="background:var(--carbon);">
+  <section id="servicos" class="motion-section section-carbon" data-motion-section data-screen-label="Serviços e preços" style="background:var(--carbon);">
     <div class="shell sec" style="padding-top:100px; padding-bottom:96px;">
-      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:52px;">
+      <div data-motion="heading" style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:52px;">
         <div>
           <span class="kicker"><b>01</b>A tabela</span>
           <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Serviços &amp; preços</h2>
@@ -828,8 +1082,8 @@
       </div>
 
       <!-- Serviço em destaque -->
-      <div class="featured" style="margin-bottom:44px;">
-        <div class="featured-grid" style="display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); border:1px solid var(--line-2); background:var(--carbon);">
+      <div class="featured" data-motion="scale" data-parallax="featured" style="margin-bottom:44px;">
+        <div class="featured-grid" style="display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); border:1px solid var(--line-2); background:#000000;">
           <div class="featured-media" style="position:relative; min-height:340px; overflow:hidden;">
             <img class="featured-img" src="{{ featured.img }}" alt="{{ featured.name }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
             <div style="position:absolute; inset:0; background:linear-gradient(120deg, rgba(11,11,12,.15), rgba(11,11,12,.55));"></div>
@@ -851,7 +1105,7 @@
       <!-- Tabela de preços -->
       <div>
         <sc-for list="{{ tabela }}" as="s" hint-placeholder-count="5">
-          <div class="tabela-row" style="display:flex; align-items:baseline; gap:20px; padding:20px 14px; border-bottom:1px solid var(--line);">
+          <div class="tabela-row" data-motion="row" style="display:flex; align-items:baseline; gap:20px; padding:20px 14px; border-bottom:1px solid var(--line);">
             <div style="min-width:0;">
               <span class="tabela-name" style="font-family:var(--serif); font-weight:600; font-size:clamp(21px,2.6vw,27px); color:var(--bone);">{{ s.name }}</span>
               <span style="display:block; margin-top:4px; font-family:var(--ui); font-size:13.5px; line-height:1.5; color:var(--smoke);">{{ s.desc }}</span>
@@ -866,9 +1120,9 @@
   </section>
 
   <!-- ===================== AGENDAMENTO ===================== -->
-  <section id="agendar" data-screen-label="Agendamento" style="background:var(--ink); border-top:1px solid var(--line);">
+  <section id="agendar" class="motion-section section-ink" data-motion-section data-screen-label="Agendamento" style="background:var(--ink); border-top:1px solid var(--line);">
     <div class="shell sec booking-shell" style="padding-top:100px; padding-bottom:100px;">
-      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
+      <div data-motion="heading" style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
         <div>
           <span class="kicker"><b>02</b>Agendamento</span>
           <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Marque seu horário</h2>
@@ -882,7 +1136,7 @@
         <div class="booking-layout" style="display:grid; grid-template-columns:1.55fr 1fr; gap:52px; align-items:start;">
           <div style="display:flex; flex-direction:column; gap:44px;">
 
-            <div style="display:flex; flex-direction:column; gap:18px;">
+            <div data-motion="rise" style="display:flex; flex-direction:column; gap:18px;">
               <div style="display:flex; align-items:baseline; gap:13px;">
                 <span style="font-family:var(--serif); font-weight:600; font-size:22px; color:var(--smoke-dim);">01</span>
                 <span style="font-family:var(--ui); font-size:14px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--bone);">Escolha o serviço</span>
@@ -899,7 +1153,7 @@
             </div>
 
             <sc-if value="{{ serviceChosen }}">
-            <div style="display:flex; flex-direction:column; gap:18px;">
+            <div data-motion="rise" style="display:flex; flex-direction:column; gap:18px;">
               <div style="display:flex; align-items:baseline; gap:13px; flex-wrap:wrap;">
                 <span style="font-family:var(--serif); font-weight:600; font-size:22px; color:var(--smoke-dim);">02</span>
                 <span style="font-family:var(--ui); font-size:14px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--bone);">Escolha o dia</span>
@@ -919,7 +1173,7 @@
             </sc-if>
 
             <sc-if value="{{ dayChosen }}">
-            <div style="display:flex; flex-direction:column; gap:18px;">
+            <div data-motion="rise" style="display:flex; flex-direction:column; gap:18px;">
               <div style="display:flex; align-items:baseline; gap:13px; flex-wrap:wrap;">
                 <span style="font-family:var(--serif); font-weight:600; font-size:22px; color:var(--smoke-dim);">03</span>
                 <span style="font-family:var(--ui); font-size:14px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--bone);">Escolha o horário</span>
@@ -934,7 +1188,7 @@
             </sc-if>
           </div>
 
-          <div id="booking-summary" class="summary" style="position:sticky; top:100px; background:var(--carbon); border:1px solid var(--line-2); padding:30px;">
+          <div id="booking-summary" class="summary" data-motion="scale" style="position:sticky; top:100px; background:var(--carbon); border:1px solid var(--line-2); padding:30px;">
             <h3 style="margin:0 0 22px; font-family:var(--serif); font-weight:600; font-size:26px; letter-spacing:-.01em; color:var(--bone);">Resumo</h3>
             <div style="display:flex; flex-direction:column; gap:13px; margin-bottom:24px;">
               <div style="display:flex; justify-content:space-between; gap:12px; font-family:var(--ui); font-size:14px;"><span style="color:var(--smoke);">Serviço</span><span style="color:var(--bone); font-weight:600; text-align:right;">{{ resumoServico }}</span></div>
@@ -967,7 +1221,7 @@
       </sc-if>
 
       <sc-if value="{{ booked }}" hint-placeholder-val="{{ false }}">
-        <div style="max-width:540px; margin:0 auto; text-align:center; background:var(--carbon); border:1px solid var(--brass-deep); padding:56px 40px;">
+        <div data-motion="scale" style="max-width:540px; margin:0 auto; text-align:center; background:var(--carbon); border:1px solid var(--brass-deep); padding:56px 40px;">
           <div style="width:60px; height:60px; margin:0 auto 24px; border:1px solid var(--brass); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--brass);">✓</div>
           <h3 style="margin:0 0 12px; font-family:var(--serif); font-weight:700; font-size:38px; letter-spacing:-.01em; color:var(--bone);">Horário marcado</h3>
           <p style="margin:0 0 8px; font-family:var(--ui); font-size:16px; line-height:1.6; color:var(--bone-dim);">{{ resumoNome }}, te esperamos:</p>
@@ -982,9 +1236,9 @@
   </section>
 
   <!-- ===================== GALERIA ===================== -->
-  <section id="galeria" data-screen-label="Galeria" style="background:var(--carbon); border-top:1px solid var(--line);">
+  <section id="galeria" class="motion-section section-carbon" data-motion-section data-screen-label="Galeria" style="background:var(--carbon); border-top:1px solid var(--line);">
     <div class="shell sec" style="padding-top:100px; padding-bottom:100px;">
-      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
+      <div data-motion="heading" style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
         <div>
           <span class="kicker"><b>03</b>O trabalho</span>
           <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Fala por si</h2>
@@ -992,24 +1246,24 @@
         <a href="#agendar" style="font-family:var(--ui); font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--brass);">Quero um desses →</a>
       </div>
       <div class="gallery-grid" style="display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:220px; gap:8px;">
-        <img class="{{ galleryClass }} g-wide" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200&auto=format&fit=crop" alt="Interior da barbearia" style="grid-column:span 2; grid-row:span 2; width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=900&auto=format&fit=crop" alt="Corte degradê" style="width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=900&auto=format&fit=crop" alt="Ferramentas de barbeiro" style="width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?q=80&w=900&auto=format&fit=crop" alt="Barba na navalha" style="width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1567894340315-735d7c361db0?q=80&w=900&auto=format&fit=crop" alt="Cadeira de barbeiro" style="width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=900&auto=format&fit=crop" alt="Mãos do barbeiro" style="width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }} g-wide" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200&auto=format&fit=crop" alt="Interior do salão" style="grid-column:span 2; width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=900&auto=format&fit=crop" alt="Corte moderno" style="width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }} g-wide" src="https://images.unsplash.com/photo-1493256338651-d82f7acb2b38?q=80&w=1200&auto=format&fit=crop" alt="Cliente na cadeira" style="grid-column:span 2; width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1647140655214-e4a2d914971f?q=80&w=900&auto=format&fit=crop" alt="Acabamento na navalha" style="width:100%; height:100%; object-fit:cover;">
-        <img class="{{ galleryClass }}" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=900&auto=format&fit=crop" alt="Barbeiro em ação" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }} g-wide" data-motion="image" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200&auto=format&fit=crop" alt="Interior da barbearia" style="grid-column:span 2; grid-row:span 2; width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=900&auto=format&fit=crop" alt="Corte degradê" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=900&auto=format&fit=crop" alt="Ferramentas de barbeiro" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?q=80&w=900&auto=format&fit=crop" alt="Barba na navalha" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1567894340315-735d7c361db0?q=80&w=900&auto=format&fit=crop" alt="Cadeira de barbeiro" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=900&auto=format&fit=crop" alt="Mãos do barbeiro" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }} g-wide" data-motion="image" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200&auto=format&fit=crop" alt="Interior do salão" style="grid-column:span 2; width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=900&auto=format&fit=crop" alt="Corte moderno" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }} g-wide" data-motion="image" src="https://images.unsplash.com/photo-1493256338651-d82f7acb2b38?q=80&w=1200&auto=format&fit=crop" alt="Cliente na cadeira" style="grid-column:span 2; width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1647140655214-e4a2d914971f?q=80&w=900&auto=format&fit=crop" alt="Acabamento na navalha" style="width:100%; height:100%; object-fit:cover;">
+        <img class="{{ galleryClass }}" data-motion="image" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=900&auto=format&fit=crop" alt="Barbeiro em ação" style="width:100%; height:100%; object-fit:cover;">
       </div>
     </div>
   </section>
 
   <!-- ===================== FOOTER ===================== -->
-  <footer style="background:var(--ink); border-top:1px solid var(--line);">
-    <div class="shell" style="padding-top:30px; padding-bottom:30px; display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;">
+  <footer class="motion-footer" data-motion-section style="background:var(--ink); border-top:1px solid var(--line);">
+    <div class="shell" data-motion="rise" style="padding-top:30px; padding-bottom:30px; display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;">
       <span style="font-family:var(--ui); font-weight:700; font-size:16px; letter-spacing:.24em; text-transform:uppercase; color:var(--smoke);">Navalha</span>
       <span style="font-family:var(--ui); font-size:13px; color:var(--smoke-dim);">Barbearia de autor desde 2016 · Feito na régua</span>
       <a href="https://instagram.com/navalha.barbearia" style="font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--smoke);">@navalha.barbearia</a>
@@ -1039,20 +1293,157 @@ class Component extends DCLogic {
     document.addEventListener('visibilitychange', this._onVisibility);
     this._play();
     [200, 700, 1600].forEach((t) => setTimeout(() => this._play(), t));
+
+    this._motionRoot = document.querySelector('.site');
+    this._systemReducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this._motionReduced = false;
+    if (!this._motionReduced && 'IntersectionObserver' in window) {
+      this._revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          this._revealMotionElement(entry.target);
+          this._revealObserver.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: .05 });
+      this._sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => entry.target.classList.toggle('is-section-visible', entry.isIntersecting));
+      }, { rootMargin: '-16% 0px -16% 0px', threshold: 0.01 });
+    }
+    this._prepareMotion(document);
+    this._motionMutation = new MutationObserver((entries) => {
+      entries.forEach((entry) => entry.addedNodes.forEach((node) => {
+        if (node.nodeType === 1) this._prepareMotion(node);
+      }));
+    });
+    if (this._motionRoot) {
+      this._motionMutation.observe(this._motionRoot, { childList: true, subtree: true });
+      requestAnimationFrame(() => this._motionRoot && this._motionRoot.classList.add('motion-ready'));
+    }
+
+    this._navEl = document.querySelector('.nav-shell');
+    this._progressLabel = document.querySelector('.scroll-progress-label b');
+    this._heroEl = document.getElementById('topo');
+    this._motionSections = Array.from(document.querySelectorAll('[data-motion-section]'));
+    this._featuredEl = document.querySelector('[data-parallax="featured"]');
+    this._motionTick = () => {
+      this._motionFrame = null;
+      if (this._motionReduced) return;
+      const vh = Math.max(window.innerHeight, 1);
+      if (this._motionRoot) {
+        const scrollRange = Math.max(document.documentElement.scrollHeight - vh, 1);
+        const pageProgress = Math.min(1, Math.max(0, window.scrollY / scrollRange));
+        this._motionRoot.style.setProperty('--page-progress', pageProgress.toFixed(4));
+        if (this._progressLabel) this._progressLabel.textContent = String(Math.round(pageProgress * 100)).padStart(2, '0');
+      }
+      if (this._heroEl && this._motionRoot) {
+        const heroRect = this._heroEl.getBoundingClientRect();
+        const progress = Math.min(1, Math.max(0, -heroRect.top / Math.max(heroRect.height, 1)));
+        this._motionRoot.style.setProperty('--hero-progress', progress.toFixed(4));
+        this._motionRoot.style.setProperty('--hero-opacity', Math.max(.2, 1 - progress * .88).toFixed(4));
+      }
+      this._motionSections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+        section.style.setProperty('--section-progress', progress.toFixed(4));
+      });
+      if (this._featuredEl) {
+        const rect = this._featuredEl.getBoundingClientRect();
+        const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+        this._featuredEl.style.setProperty('--featured-progress', progress.toFixed(4));
+      }
+      if (this._navEl) this._navEl.classList.toggle('is-scrolled', window.scrollY > 24);
+    };
+    this._requestMotionTick = () => {
+      if (!this._motionFrame) this._motionFrame = requestAnimationFrame(this._motionTick);
+    };
     this._onScroll = () => {
       const ids = ['contato', 'servicos', 'agendar', 'galeria'];
       const y = window.scrollY + 150;
       let active = '', best = -1;
       ids.forEach((id) => { const el = document.getElementById(id); if (el && el.offsetTop <= y && el.offsetTop > best) { best = el.offsetTop; active = id; } });
       if (active !== this.state.activeSection) this.setState({ activeSection: active });
+      this._requestMotionTick();
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._requestMotionTick, { passive: true });
     this._onScroll();
   }
   componentWillUnmount() {
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._requestMotionTick) window.removeEventListener('resize', this._requestMotionTick);
     if (this._onVisibility) document.removeEventListener('visibilitychange', this._onVisibility);
     if (this._heroVideo && this._onHeroEnded) this._heroVideo.removeEventListener('ended', this._onHeroEnded);
+    if (this._motionFrame) cancelAnimationFrame(this._motionFrame);
+    if (this._revealObserver) this._revealObserver.disconnect();
+    if (this._sectionObserver) this._sectionObserver.disconnect();
+    if (this._motionMutation) this._motionMutation.disconnect();
+  }
+  _prepareMotion(root) {
+    const elements = [];
+    if (root.matches && root.matches('[data-motion]')) elements.push(root);
+    if (root.querySelectorAll) elements.push(...root.querySelectorAll('[data-motion]'));
+    elements.forEach((el) => {
+      if (el.classList.contains('motion-prepared')) return;
+      el.classList.add('motion-prepared');
+      if (this._motionReduced) {
+        el.classList.add('is-revealed');
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.clipPath = 'none';
+      } else if (this._revealObserver) this._revealObserver.observe(el);
+      else this._revealMotionElement(el);
+    });
+    const sections = [];
+    if (root.matches && root.matches('[data-motion-section]')) sections.push(root);
+    if (root.querySelectorAll) sections.push(...root.querySelectorAll('[data-motion-section]'));
+    sections.forEach((section) => {
+      if (section.classList.contains('section-motion-prepared')) return;
+      section.classList.add('section-motion-prepared');
+      if (this._sectionObserver) this._sectionObserver.observe(section);
+      else section.classList.add('is-section-visible');
+    });
+    if (this._requestMotionTick) this._requestMotionTick();
+  }
+  _revealMotionElement(el) {
+    if (!el || el.getAttribute('data-motion-played') === 'true') return;
+    el.setAttribute('data-motion-played', 'true');
+    const type = el.getAttribute('data-motion') || 'rise';
+    const compact = window.innerWidth <= 720 || this._systemReducedMotion;
+    const y = compact ? 28 : 58;
+    const x = compact ? 24 : 52;
+    let from = { opacity:0, transform:'translate3d(0,' + y + 'px,0)' };
+    if (type === 'heading') {
+      from = { opacity:0, transform:'translate3d(0,' + (compact ? 34 : 68) + 'px,0)', clipPath:'inset(0 0 34% 0)' };
+    } else if (type === 'scale') {
+      from = { opacity:0, transform:'translate3d(0,' + (compact ? 26 : 46) + 'px,0) scale(' + (compact ? '.97' : '.91') + ')' };
+    } else if (type === 'row') {
+      from = { opacity:0, transform:'translate3d(' + x + 'px,0,0)' };
+    } else if (type === 'image') {
+      from = { opacity:.05, transform:'translate3d(0,' + (compact ? 36 : 74) + 'px,0) scale(' + (compact ? '.96' : '.88') + ')', clipPath:'inset(16% 0)' };
+    }
+    const to = { opacity:1, transform:'translate3d(0,0,0) scale(1)', clipPath:'inset(0)' };
+    const delay = parseInt(getComputedStyle(el).getPropertyValue('--motion-delay'), 10) || 0;
+    const duration = this._systemReducedMotion ? 520 : type === 'image' ? 1050 : type === 'heading' ? 920 : 780;
+    el.classList.add('is-revealed');
+    if (typeof el.animate === 'function') {
+      const animation = el.animate([from, to], {
+        duration,
+        delay,
+        easing:'cubic-bezier(.16,1,.3,1)',
+        fill:'both',
+      });
+      animation.finished.then(() => animation.cancel()).catch(() => {});
+    } else {
+      el.style.opacity = String(from.opacity);
+      el.style.transform = from.transform;
+      el.style.clipPath = from.clipPath || 'inset(0)';
+      el.style.transition = 'opacity ' + duration + 'ms ease, transform ' + duration + 'ms cubic-bezier(.16,1,.3,1), clip-path ' + duration + 'ms ease';
+      requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'translate3d(0,0,0) scale(1)';
+        el.style.clipPath = 'inset(0)';
+      });
+    }
   }
   _play() {
     const v = this._heroVideo || document.querySelector('video.hero-video');
