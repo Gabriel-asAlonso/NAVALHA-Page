@@ -35,7 +35,9 @@
     .accent-cobre { --brass:#B06A3C; --brass-hi:#DA9367; --brass-deep:#6C3D20; }
     .accent-aco   { --brass:#7F8A96; --brass-hi:#B0B9C3; --brass-deep:#49515B; }
 
-    .shell { max-width:1180px; margin:0 auto; padding-left:40px; padding-right:40px; }
+    .site, .shell, .hero-copy, .services-head, .booking-layout, .summary { min-width:0; }
+    .site { overflow-x:clip; }
+    .shell { max-width:1180px; margin:0 auto; padding-left:clamp(20px,4vw,40px); padding-right:clamp(20px,4vw,40px); }
 
     .nav-menu { display:flex; align-items:center; gap:30px; }
     .nav-toggle { display:none; }
@@ -314,6 +316,16 @@
     .site-wordmark:hover { color:var(--bone); opacity:.78; }
     .nav-cta { min-width:112px; text-align:center; }
 
+    .section-heading {
+      margin:14px 0 0;
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:clamp(40px,5.4vw,60px);
+      line-height:.98;
+      letter-spacing:-.01em;
+      color:var(--bone);
+    }
+
     .hero-premium {
       position:relative;
       isolation:isolate;
@@ -575,9 +587,9 @@
       to { opacity:1; transform:translateY(0); }
     }
     @media (max-width:900px) {
-      .nav-shell { padding:15px 20px !important; }
+      .nav-shell { padding:0 20px !important; }
       .nav-shell::after { right:20px; }
-      .nav-toggle { display:inline-flex; width:42px; height:42px; align-items:center; justify-content:center; background:transparent; border:1px solid var(--line-2); color:var(--bone); cursor:pointer; font-size:19px; border-radius:var(--r); }
+      .nav-toggle { display:inline-flex; width:44px; height:44px; align-items:center; justify-content:center; background:transparent; border:1px solid var(--line-2); color:var(--bone); cursor:pointer; font-size:19px; border-radius:var(--r); }
       .nav-menu { position:absolute; top:calc(100% + 1px); left:12px; right:12px; flex-direction:column; align-items:stretch; gap:2px; padding:8px; background:rgba(19,19,21,.96); border:1px solid var(--line-2); box-shadow:0 16px 32px rgba(0,0,0,.45); backdrop-filter:blur(16px); display:none; }
       .nav-shell.nav-open .nav-menu { display:flex; }
       .nav-link, .nav-cta { display:block !important; padding:15px 16px !important; text-align:left; }
@@ -585,14 +597,20 @@
       .nav-cta { text-align:center !important; margin-top:6px; }
       .hero-title { font-size:clamp(64px,10.4vw,92px); }
       .hero-script { font-size:clamp(52px,8vw,72px); }
-      .hero-facts { gap:18px; }
+      .hero-shell { padding-left:28px; padding-right:28px; }
+      .hero-facts { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px 28px; }
       .hero-fact small { font-size:32px; }
-      .hero-fact span { font-size:7px; letter-spacing:1.7px; }
+      .hero-fact span { font-size:8px; letter-spacing:1.7px; white-space:normal; }
+      .gallery-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; grid-auto-rows:190px !important; }
+      .gallery-grid img.g-wide { grid-column:span 2 !important; }
     }
-    @media (max-width:860px) {
+    @media (max-width:900px) {
       .diff-grid { grid-template-columns:1fr !important; }
-      .booking-layout { grid-template-columns:1fr !important; gap:36px !important; }
-      .summary { position:static !important; }
+      .booking-layout { grid-template-columns:minmax(0,1fr) !important; gap:36px !important; }
+      .booking-layout > * { width:100%; min-width:0; max-width:100%; }
+      .summary { position:static !important; width:100%; max-width:100%; }
+      .summary input, .summary p { max-width:100%; }
+      .summary p { overflow-wrap:anywhere; }
       .contact-grid { grid-template-columns:1fr !important; gap:40px !important; }
     }
     @media (max-width:720px) {
@@ -605,8 +623,8 @@
           linear-gradient(180deg,rgba(7,7,8,.18) 0%,rgba(7,7,8,.06) 32%,rgba(7,7,8,.54) 58%,rgba(7,7,8,.97) 100%);
       }
       .hero-atmosphere { opacity:.42; background:radial-gradient(circle at 20% 68%,rgba(193,151,75,.13),transparent 25%); }
-      .hero-video { object-position:57% center; filter:brightness(.75) saturate(.64) contrast(1.12); }
-      .hero-video-toggle { top:88px; right:28px; width:38px; height:38px; }
+      .hero-video { object-position:center; filter:brightness(.75) saturate(.64) contrast(1.12); }
+      .hero-video-toggle { top:86px; right:24px; width:44px; height:44px; }
       .hero-shell {
         min-height:max(900px,100svh);
         padding-top:72px !important;
@@ -661,6 +679,9 @@
       .mobile-bar { display:flex !important; }
       .booking-shell { padding-bottom:110px !important; }
       .diff-grid { gap:1px !important; }
+      .field input { min-height:52px; font-size:16px !important; }
+      .time-slot { min-height:48px; }
+      .chip, .daychip { min-height:48px; }
     }
     @media (max-width:520px) {
       .site-wordmark { font-size:16px !important; }
@@ -669,8 +690,15 @@
       .hero-secondary { font-size:9.5px; letter-spacing:1.25px; }
       .gallery-grid { grid-template-columns:1fr !important; grid-auto-rows:220px !important; }
       .gallery-grid img.g-wide { grid-column:auto !important; }
-      .booking-form-grid { grid-template-columns:repeat(3,1fr) !important; }
+      .day-picker { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px !important; overflow:visible !important; padding-bottom:0 !important; }
+      .day-picker .daychip { min-width:0 !important; width:100%; }
+      .booking-form-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
       .svc-chips { grid-template-columns:1fr !important; }
+      .summary { padding:24px 20px !important; }
+      .section-heading { font-size:clamp(36px,11vw,48px); }
+      .success-actions { flex-direction:column; }
+      .success-actions > * { width:100%; }
+      footer .shell { align-items:flex-start !important; flex-direction:column; gap:10px !important; }
     }
     @media (max-width:360px) {
       .hero-kicker { font-size:7.5px; letter-spacing:1.35px; }
@@ -680,11 +708,9 @@
       .hero-secondary { width:100%; }
       .hero-fact span { font-size:7.5px; }
     }
-    @media (max-width:900px) {
-      .info-bar > div { padding:28px 26px !important; }
-    }
-    @media (max-width:860px) {
+    @media (max-width:1100px) {
       .info-bar { grid-template-columns:repeat(2,1fr) !important; }
+      .info-bar > div { padding:28px 26px !important; }
       .info-bar > div { border-bottom:1px solid var(--line); }
       .info-bar > div:nth-child(2) { border-right:0 !important; }
       .info-bar > div:nth-child(3), .info-bar > div:nth-child(4) { border-bottom:0; }
@@ -724,7 +750,7 @@
       </span>
       Navalha
     </a>
-    <button type="button" class="nav-toggle" onClick="{{ toggleNav }}" aria-label="Abrir menu" aria-expanded="{{ navOpen }}">☰</button>
+    <button type="button" class="nav-toggle" onClick="{{ toggleNav }}" aria-label="{{ navMenuLabel }}" aria-expanded="{{ navOpen }}">☰</button>
     <div class="nav-menu">
       <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="3">
         <a href="{{ l.href }}" class="nav-link" aria-current="{{ l.current }}" onClick="{{ closeNav }}" style="color:var(--smoke); font-size:12px; font-weight:600; letter-spacing:1.6px; text-transform:uppercase;">{{ l.label }}</a>
@@ -736,8 +762,7 @@
   <!-- ===================== HERO ===================== -->
   <section id="topo" class="hero-premium" data-screen-label="Hero">
     <div class="hero-media" aria-hidden="true">
-      <video class="hero-video" autoplay muted loop playsinline preload="metadata" tabindex="-1" poster="./hero-poster.jpg">
-        <source src="./hero.mp4" type="video/mp4">
+      <video class="hero-video" autoplay muted loop playsinline preload="none" tabindex="-1" poster="./hero-poster.jpg" data-desktop-src="./hero.mp4" data-mobile-src="./hero-mobile.mp4">
         <img src="./hero-poster.jpg" alt="">
       </video>
     </div>
@@ -808,7 +833,7 @@
     <div class="shell services-shell">
       <header class="services-head">
         <div>
-          <span class="kicker"><b>01</b>Serviços</span>
+        
           <h2 class="services-title">Serviços.</h2>
         </div>
         <p class="services-intro">Corte, barba e acabamento feitos sem pressa, com técnica precisa e produto da casa.</p>
@@ -848,8 +873,8 @@
     <div class="shell sec booking-shell" style="padding-top:100px; padding-bottom:100px;">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
         <div>
-          <span class="kicker"><b>02</b>Agendamento</span>
-          <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Marque seu horário</h2>
+     
+          <h2 class="section-heading">Marque seu horário</h2>
         </div>
         <sc-if value="{{ notBooked }}" hint-placeholder-val="{{ true }}">
           <p style="max-width:300px; margin:0; font-family:var(--ui); font-size:14px; line-height:1.55; color:var(--smoke);">{{ progressLabel }}</p>
@@ -884,7 +909,7 @@
                 <span style="font-family:var(--ui); font-size:13px; color:var(--smoke);">domingo fechado</span>
                 <span style="margin-left:auto; font-family:var(--ui); font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:{{ dayStatusColor }};">{{ dayStatus }}</span>
               </div>
-              <div style="display:flex; gap:9px; overflow-x:auto; padding-bottom:6px;">
+              <div class="day-picker" style="display:flex; gap:9px; overflow-x:auto; padding-bottom:6px;">
                 <sc-for list="{{ days }}" as="d" hint-placeholder-count="8">
                   <button type="button" class="daychip" onClick="{{ d.onPick }}" style="{{ d.style }}">
                     <span style="display:block; font-family:var(--ui); font-size:10.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--smoke);">{{ d.dow }}</span>
@@ -964,8 +989,7 @@
     <div class="shell sec" style="padding-top:100px; padding-bottom:100px;">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
         <div>
-          <span class="kicker"><b>03</b>O trabalho</span>
-          <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Fala por si</h2>
+          <h2 class="section-heading">Fala por si</h2>
         </div>
         <a href="#agendar" style="font-family:var(--ui); font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--brass);">Quero um desses →</a>
       </div>
@@ -1013,6 +1037,8 @@ class Component extends DCLogic {
       };
       this._heroVideo.addEventListener('ended', this._onHeroEnded);
     }
+    this._onHeroViewportChange = () => this._play();
+    window.addEventListener('resize', this._onHeroViewportChange, { passive: true });
     this._onVisibility = () => { if (!document.hidden) this._play(); };
     document.addEventListener('visibilitychange', this._onVisibility);
     this._play();
@@ -1029,11 +1055,24 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._onHeroViewportChange) window.removeEventListener('resize', this._onHeroViewportChange);
     if (this._onVisibility) document.removeEventListener('visibilitychange', this._onVisibility);
     if (this._heroVideo && this._onHeroEnded) this._heroVideo.removeEventListener('ended', this._onHeroEnded);
   }
-  _play() {
+  _syncHeroVideoSource() {
     const v = this._heroVideo || document.querySelector('video.hero-video');
+    if (!v) return null;
+    const isMobile = window.matchMedia('(max-width:720px)').matches;
+    const source = isMobile ? v.dataset.mobileSrc : v.dataset.desktopSrc;
+    if (source && v.dataset.activeSrc !== source) {
+      v.dataset.activeSrc = source;
+      v.src = source;
+      v.load();
+    }
+    return v;
+  }
+  _play() {
+    const v = this._syncHeroVideoSource();
     if (!v || this.state.heroVideoPaused) return;
     v.muted = true;
     v.loop = true;
@@ -1042,11 +1081,11 @@ class Component extends DCLogic {
     if (p && p.catch) p.catch(() => {});
   }
   _pauseHeroVideo() {
-    const v = document.querySelector('video.hero-video');
+    const v = this._syncHeroVideoSource();
     if (v) v.pause();
   }
   _toggleHeroVideo() {
-    const v = document.querySelector('video.hero-video');
+    const v = this._syncHeroVideoSource();
     if (!v) return;
     if (v.paused) {
       v.muted = true;
@@ -1169,7 +1208,7 @@ class Component extends DCLogic {
 
     return {
       rootAccent, galleryClass, serviceGallery, svcChips, days, times, diffs: this.getDiffs(),
-      navLinks, navOpen: S.navOpen, navShellClass: S.navOpen ? 'nav-open' : '',
+      navLinks, navOpen: S.navOpen, navMenuLabel: S.navOpen ? 'Fechar menu' : 'Abrir menu', navShellClass: S.navOpen ? 'nav-open' : '',
       toggleNav: () => this.setState((s) => ({ navOpen: !s.navOpen })),
       closeNav: () => this.setState({ navOpen: false }),
       toggleHeroVideo: () => this._toggleHeroVideo(),
