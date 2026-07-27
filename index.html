@@ -86,9 +86,9 @@
     .services-grid {
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:1px;
+      gap:8px;
       padding:1px;
-      background:var(--line);
+      background:var(--ink);
     }
     .service-card {
       position:relative;
@@ -704,8 +704,8 @@
     .site > #topo { order:1; }
     .site > #contato { order:2; }
     .site > #servicos { order:3; }
-    .site > #galeria { order:4; }
-    .site > #agendar { order:5; }
+    .site > #galeria { order:5; }
+    .site > #agendar { order:4; }
     .site > footer { order:6; }
   </style>
 </helmet>
@@ -848,7 +848,7 @@
     <div class="shell sec booking-shell" style="padding-top:100px; padding-bottom:100px;">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
         <div>
-          <span class="kicker"><b>03</b>Agendamento</span>
+          <span class="kicker"><b>02</b>Agendamento</span>
           <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Marque seu horário</h2>
         </div>
         <sc-if value="{{ notBooked }}" hint-placeholder-val="{{ true }}">
@@ -964,7 +964,7 @@
     <div class="shell sec" style="padding-top:100px; padding-bottom:100px;">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:40px;">
         <div>
-          <span class="kicker"><b>02</b>O trabalho</span>
+          <span class="kicker"><b>03</b>O trabalho</span>
           <h2 style="margin:14px 0 0; font-family:var(--serif); font-weight:700; font-size:clamp(40px,5.4vw,60px); line-height:.98; letter-spacing:-.01em; color:var(--bone);">Fala por si</h2>
         </div>
         <a href="#agendar" style="font-family:var(--ui); font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--brass);">Quero um desses →</a>
